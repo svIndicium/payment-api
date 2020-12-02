@@ -2,13 +2,6 @@ name: Docker
 
 on:
   push:
-    # Publish `master` as Docker `latest` image.
-    branches:
-      - master
-
-    # Publish `v1.2.3` tags as releases.
-    tags:
-      - v*
 
   # Run tests for any PRs.
   pull_request:
@@ -53,6 +46,11 @@ jobs:
         run: chmod +x mvnw
       - name: Build with Maven
         run: ./mvnw compile
+      - name: Upload jar for docker
+        uses: actions/upload-artifact@v2
+        with:
+          name: jar
+          path: target/payment-0.0.1-SNAPSHOT.jar
 #       - name: Sonarcloud
 #         run: ./gradlew sonarqube
 #         env:
@@ -70,6 +68,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      - name: Download built jar
+        uses: actions/download-artifact@v2
+        with:
+          name: jar
 
       - name: Build image
         run: docker build . --file Dockerfile --tag $IMAGE_NAME
