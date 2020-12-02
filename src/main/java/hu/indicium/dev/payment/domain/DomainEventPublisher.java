@@ -36,12 +36,12 @@ public class DomainEventPublisher {
                 Class<?> eventType = aDomainEvent.getClass();
 
                 @SuppressWarnings("unchecked")
-                List<hu.indicium.dev.ledenadministratie.domain.DomainEventSubscriber<T>> allSubscribers = this.subscribers();
+                List<DomainEventSubscriber<T>> allSubscribers = this.subscribers();
 
-                for (hu.indicium.dev.ledenadministratie.domain.DomainEventSubscriber<T> subscriber : allSubscribers) {
+                for (DomainEventSubscriber<T> subscriber : allSubscribers) {
                     Class<?> subscribedToType = subscriber.subscribedToEventType();
 
-                    if (eventType == subscribedToType || subscribedToType == hu.indicium.dev.ledenadministratie.domain.DomainEvent.class) {
+                    if (eventType == subscribedToType || subscribedToType == DomainEvent.class) {
                         subscriber.handleEvent(aDomainEvent);
                     }
                 }
@@ -52,8 +52,8 @@ public class DomainEventPublisher {
         }
     }
 
-    public void publishAll(Collection<hu.indicium.dev.ledenadministratie.domain.DomainEvent> aDomainEvents) {
-        for (hu.indicium.dev.ledenadministratie.domain.DomainEvent domainEvent : aDomainEvents) {
+    public void publishAll(Collection<DomainEvent> aDomainEvents) {
+        for (DomainEvent domainEvent : aDomainEvents) {
             this.publish(domainEvent);
         }
     }
@@ -65,7 +65,7 @@ public class DomainEventPublisher {
     }
 
     @SuppressWarnings("unchecked")
-    public <T> DomainEventPublisher subscribe(hu.indicium.dev.ledenadministratie.domain.DomainEventSubscriber<T> aSubscriber) {
+    public <T> DomainEventPublisher subscribe(DomainEventSubscriber<T> aSubscriber) {
         if (!this.isPublishing()) {
             this.ensureSubscribersList();
 
