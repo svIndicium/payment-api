@@ -8,7 +8,7 @@ on:
 
 env:
   IMAGE_NAME: payment-api
-  DB_URL: jdbc:postgresql://localhost:5432/postgres
+  DB_URL: jdbc:postgresql://postgres:5432/postgres
   DB_USER: postgres
   DB_PASS: postgres
 
