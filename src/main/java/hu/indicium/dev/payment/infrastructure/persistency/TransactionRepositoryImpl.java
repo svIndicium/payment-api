@@ -1,5 +1,6 @@
 package hu.indicium.dev.payment.infrastructure.persistency;
 
+import hu.indicium.dev.payment.domain.model.payment.PaymentId;
 import hu.indicium.dev.payment.domain.model.transaction.Transaction;
 import hu.indicium.dev.payment.domain.model.transaction.TransactionId;
 import hu.indicium.dev.payment.domain.model.transaction.TransactionRepository;
@@ -31,6 +32,11 @@ public class TransactionRepositoryImpl implements TransactionRepository {
     public Transaction getTransactionById(TransactionId transactionId) {
         return transactionRepository.findByTransactionId(transactionId)
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Transaction %s not found.", transactionId.getId().toString())));
+    }
+
+    @Override
+    public Collection<Transaction> getTransactionsByPaymentId(PaymentId paymentId) {
+        return transactionRepository.findByPaymentPaymentId(paymentId);
     }
 
     @Override

@@ -2,8 +2,14 @@ package hu.indicium.dev.payment.domain.model.transaction.info;
 
 import hu.indicium.dev.payment.domain.model.transaction.TransactionStatus;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
+@NoArgsConstructor
 public abstract class BaseDetails {
     private TransactionStatus transactionStatus;
+
+    public BaseDetails(TransactionStatus transactionStatus) {
+        this.transactionStatus = transactionStatus;
+    }
 }

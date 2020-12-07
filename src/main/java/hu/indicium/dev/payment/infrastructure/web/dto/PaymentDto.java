@@ -13,6 +13,10 @@ public class PaymentDto {
 
     private double amount;
 
+    private double openAmount;
+
+    private double remainingAmount;
+
     private PaymentStatus status;
 
     private String description;
@@ -25,5 +29,7 @@ public class PaymentDto {
         this.status = payment.getPaymentStatus();
         this.description = payment.getPaymentDetails().getDescription();
         this.createdAt = payment.getPaymentDetails().getCreatedAt();
+        this.openAmount = payment.getOpenAmount();
+        this.remainingAmount = payment.getRemainingAmount();
     }
 }

@@ -2,13 +2,13 @@ package hu.indicium.dev.payment.domain.model.payment;
 
 import hu.indicium.dev.payment.domain.AssertionConcern;
 import hu.indicium.dev.payment.domain.model.transaction.Transaction;
+import hu.indicium.dev.payment.domain.model.transaction.TransactionId;
+import hu.indicium.dev.payment.domain.model.transaction.UpdatableTransaction;
+import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Embedded;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -26,7 +26,7 @@ public class Payment extends AssertionConcern {
 
     private PaymentStatus paymentStatus;
 
-    @OneToMany(mappedBy = "payment")
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
     private Set<Transaction> transactions = new HashSet<>();
 
     public Payment(PaymentId paymentId, Double amount, PaymentDetails paymentDetails) {
@@ -36,12 +36,26 @@ public class Payment extends AssertionConcern {
         this.setPaymentDetails(paymentDetails);
     }
 
+    public boolean canAcceptTransactionAmount(Double amount) {
+        return getOpenAmount() >= amount;
+    }
+
     public Double getRemainingAmount() {
         Double alreadyPaid = 0.0;
         for (Transaction transaction : transactions) {
             alreadyPaid += transaction.getPaidAmount();
         }
         return amount - alreadyPaid;
+    }
+
+    public Double getOpenAmount() {
+        Double open = 0.0;
+        for (Transaction transaction : transactions) {
+            if (!transaction.isPending() || !transaction.isPaid()) {
+                open += transaction.getAmount();
+            }
+        }
+        return amount - open;
     }
 
     private void setPaymentId(PaymentId orderId) {
@@ -70,10 +84,26 @@ public class Payment extends AssertionConcern {
 
     public void assignTransaction(Transaction transaction) {
         assertArgumentTrue(paymentStatus.equals(PaymentStatus.OPEN), "Betaling is al betaald of geannuleerd.");
-        assertArgumentTrue(getRemainingAmount() < transaction.getAmount(), "Er is te veel betaald.");
+        assertArgumentTrue(getOpenAmount() >= transaction.getAmount(), "Er is te veel betaald.");
 
         transaction.setPayment(this);
         this.transactions.add(transaction);
+    }
+
+    private Transaction getTransactionById(TransactionId transactionId) {
+        return transactions.stream()
+                .filter(transaction -> transaction.getTransactionId().equals(transactionId))
+                .findFirst()
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Transaction %s not found in payment %s", transactionId.getId().toString(), this.getPaymentId().getId().toString())));
+    }
+
+    public <T extends BaseDetails> void updateTransaction(TransactionId transactionId, T baseDetails) {
+        Transaction transaction = getTransactionById(transactionId);
+        if (transaction instanceof UpdatableTransaction) {
+            ((UpdatableTransaction<T>) transaction).updateTransaction(baseDetails);
+            return;
+        }
+        throw new RuntimeException("Transaction not updatable.");
     }
 
 }

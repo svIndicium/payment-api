@@ -14,6 +14,10 @@ public class TransferTransaction extends Transaction implements UpdatableTransac
     @Embedded
     private TransferDetails transferDetails;
 
+    public TransferTransaction(TransactionId transactionId, Double amount) {
+        super(transactionId, amount);
+    }
+
     @Override
     public void updateTransaction(TransferDetails updatedTransactionInfo) {
         if (updatedTransactionInfo.getTransactionStatus().equals(TransactionStatus.PAID)) {
@@ -22,6 +26,7 @@ public class TransferTransaction extends Transaction implements UpdatableTransac
     }
 
     private void finishTransaction(TransferDetails transferDetails) {
+        this.setAmount(transferDetails.getPaid());
         this.setStatus(TransactionStatus.PAID);
         this.setFinishedAt(new Date());
         this.setTransferDetails(transferDetails);
