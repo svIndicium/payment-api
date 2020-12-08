@@ -1,9 +1,14 @@
 package hu.indicium.dev.payment.infrastructure.setting;
 
+import hu.indicium.dev.payment.infrastructure.auth.Auth0User;
+import hu.indicium.dev.payment.infrastructure.auth.AuthService;
 import hu.indicium.dev.payment.infrastructure.setting.dto.SettingDTO;
 import hu.indicium.dev.payment.infrastructure.setting.exceptions.SettingNotFoundException;
 import hu.indicium.dev.payment.infrastructure.setting.exceptions.SettingNotSetException;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.security.access.prepost.PostFilter;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,13 +19,11 @@ public class SettingServiceImpl implements SettingService {
 
     private final SettingRepository settingRepository;
 
-//    private final AuthService authService;
+    private final AuthService authService;
 
-    public SettingServiceImpl(SettingRepository settingRepository
-//                             , @Lazy AuthService authService
-    ) {
+    public SettingServiceImpl(SettingRepository settingRepository, @Lazy AuthService authService) {
         this.settingRepository = settingRepository;
-//        this.authService = authService;
+        this.authService = authService;
     }
 
     @Override
@@ -38,19 +41,19 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-//    @PostAuthorize("hasPermission('write:' + returnObject.permission)")
+    @PostAuthorize("hasPermission('write:' + returnObject.permission)")
     public SettingDTO updateSetting(String key, String value) {
-//        Auth0User auth0User = authService.getCurrentUser();
+        Auth0User auth0User = authService.getCurrentUser();
         Setting setting = getSetting(key);
         setting.setValue(value);
-//        setting.setUpdatedBy(auth0User.getName());
+        setting.setUpdatedBy(auth0User.getName());
         setting = settingRepository.save(setting);
         return SettingMapper.map(setting);
     }
 
     @Override
-//    @PreAuthorize("hasPermission('read:settings')")
-//    @PostFilter("hasPermission('read:' + filterObject.permission)")
+    @PreAuthorize("hasPermission('read:settings')")
+    @PostFilter("hasPermission('read:' + filterObject.permission)")
     public List<SettingDTO> getAllSettings() {
         return settingRepository.findAll()
                 .stream()

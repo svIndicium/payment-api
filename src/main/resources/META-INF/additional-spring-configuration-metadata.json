@@ -1,0 +1,24 @@
+{
+  "properties": [
+    {
+      "name": "auth0.apiAudience",
+      "type": "java.lang.String",
+      "description": "Description for auth0.apiAudience."
+    },
+    {
+      "name": "auth0.issuer",
+      "type": "java.lang.String",
+      "description": "Description for auth0.issuer."
+    },
+    {
+      "name": "auth0.clientSecret",
+      "type": "java.lang.String",
+      "description": "Description for auth0.clientSecret."
+    },
+    {
+      "name": "auth0.clientId",
+      "type": "java.lang.String",
+      "description": "Description for auth0.clientId."
+    }
+  ]
+}
