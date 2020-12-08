@@ -7,6 +7,7 @@ import hu.indicium.dev.payment.domain.model.payment.PaymentDetails;
 import hu.indicium.dev.payment.domain.model.payment.PaymentId;
 import hu.indicium.dev.payment.domain.model.payment.PaymentRepository;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -16,6 +17,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Override
+    @PreAuthorize("hasPermission('create:payment')")
     public PaymentId createPayment(NewPaymentCommand newPaymentCommand) {
         PaymentId paymentId = paymentRepository.nextIdentity();
 

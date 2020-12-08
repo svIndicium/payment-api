@@ -11,6 +11,7 @@ import hu.indicium.dev.payment.infrastructure.payment.PaymentDetails;
 import hu.indicium.dev.payment.infrastructure.payment.PaymentObject;
 import hu.indicium.dev.payment.infrastructure.payment.PaymentProvider;
 import lombok.AllArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
@@ -24,6 +25,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final PaymentProvider paymentProvider;
 
     @Override
+    @PreAuthorize("hasPermission('create:transaction')")
     public TransactionId createTransaction(NewTransactionCommand newTransactionCommand) {
         TransactionId transactionId = transactionRepository.nextIdentity();
 
@@ -45,6 +47,7 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     @Override
+    @PreAuthorize("hasPermission('admin:payment')")
     public void updateTransaction(UpdateTransactionCommand updateTransactionCommand) {
         PaymentId paymentId = PaymentId.fromId(updateTransactionCommand.getPaymentId());
 
