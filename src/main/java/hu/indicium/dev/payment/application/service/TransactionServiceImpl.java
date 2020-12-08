@@ -7,6 +7,9 @@ import hu.indicium.dev.payment.domain.model.payment.PaymentRepository;
 import hu.indicium.dev.payment.domain.model.transaction.*;
 import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
 import hu.indicium.dev.payment.domain.model.transaction.info.TransferDetails;
+import hu.indicium.dev.payment.infrastructure.payment.PaymentDetails;
+import hu.indicium.dev.payment.infrastructure.payment.PaymentObject;
+import hu.indicium.dev.payment.infrastructure.payment.PaymentProvider;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +20,8 @@ public class TransactionServiceImpl implements TransactionService {
     private final TransactionRepository transactionRepository;
 
     private final PaymentRepository paymentRepository;
+
+    private final PaymentProvider paymentProvider;
 
     @Override
     public TransactionId createTransaction(NewTransactionCommand newTransactionCommand) {
@@ -47,7 +52,9 @@ public class TransactionServiceImpl implements TransactionService {
 
         TransactionId transactionId = TransactionId.fromId(updateTransactionCommand.getTransactionId());
 
-        BaseDetails baseDetails = toDetails(updateTransactionCommand);
+        Transaction transaction = transactionRepository.getTransactionById(transactionId);
+
+        BaseDetails baseDetails = DetailFactory.createDetails(transaction.getType(), updateTransactionCommand);
 
         payment.updateTransaction(transactionId, baseDetails);
 
@@ -55,18 +62,23 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private Transaction toTransaction(TransactionId transactionId, NewTransactionCommand newTransactionCommand) {
-        if (newTransactionCommand instanceof NewCashTransactionCommand) {
+        if (newTransactionCommand.getMethod().equals("cash")) {
             return new CashTransaction(transactionId, newTransactionCommand.getAmount());
-        } else if (newTransactionCommand instanceof NewTransferTransactionCommand) {
+        } else if (newTransactionCommand.getMethod().equals("transfer")) {
             return new TransferTransaction(transactionId, newTransactionCommand.getAmount());
-        }
-        throw new RuntimeException("Transaction method not implemented");
-    }
-
-    private BaseDetails toDetails(UpdateTransactionCommand updateTransactionCommand) {
-        if (updateTransactionCommand instanceof UpdateTransferTransactionCommand) {
-            UpdateTransferTransactionCommand updateTransferTransactionCommand = (UpdateTransferTransactionCommand) updateTransactionCommand;
-            return new TransferDetails(updateTransferTransactionCommand.getTransactionStatus(), updateTransferTransactionCommand.getDescription(), updateTransferTransactionCommand.getTransferredAt(), updateTransferTransactionCommand.getPaid());
+        } else if (newTransactionCommand.getMethod().equals("ideal")) {
+            PaymentObject paymentObject = paymentProvider.createPayment(new PaymentDetails(transactionId, newTransactionCommand.getDescription(), newTransactionCommand.getRedirectUrl(), newTransactionCommand.getAmount()));
+            IDealTransaction iDealTransaction = IDealTransaction.builder()
+                    .checkoutUrl(paymentObject.getCheckoutUrl())
+                    .webhookUrl(paymentObject.getWebhookUrl())
+                    .expiresAt(paymentObject.getExpiresAt())
+                    .redirectUrl(paymentObject.getRedirectUrl())
+                    .externalId(paymentObject.getExternalId())
+                    .paymentProvider(paymentObject.getPaymentProvider())
+                    .build();
+            iDealTransaction.setTransactionId(transactionId);
+            iDealTransaction.setAmount(newTransactionCommand.getAmount());
+            return iDealTransaction;
         }
         throw new RuntimeException("Transaction method not implemented");
     }

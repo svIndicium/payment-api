@@ -2,6 +2,7 @@ package hu.indicium.dev.payment.domain.model.transaction;
 
 import hu.indicium.dev.payment.domain.AssertionConcern;
 import hu.indicium.dev.payment.domain.model.payment.Payment;
+import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
@@ -16,14 +17,14 @@ import java.util.Date;
 @Inheritance(strategy=InheritanceType.JOINED)
 public abstract class Transaction extends AssertionConcern {
     @EmbeddedId
-    private TransactionId transactionId;
+    protected TransactionId transactionId;
 
     private TransactionStatus status;
 
     @ManyToOne
     private Payment payment;
 
-    private Double amount;
+    protected Double amount;
 
     @CreationTimestamp
     private Date createdAt;
@@ -85,4 +86,8 @@ public abstract class Transaction extends AssertionConcern {
     public void setFinishedAt(Date finishedAt) {
         this.finishedAt = finishedAt;
     }
+
+    public abstract void updateTransaction(BaseDetails updatedTransactionInfo);
+
+    public abstract TransactionType getType();
 }

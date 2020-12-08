@@ -8,14 +8,11 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import java.util.Date;
 
-@Embeddable
 @Data
 @NoArgsConstructor
 public class TransferDetails extends BaseDetails {
-    @Column(name = "description")
     private String description;
 
-    @Column(name = "transferred_at")
     private Date transferredAt;
 
     private transient Double paid;

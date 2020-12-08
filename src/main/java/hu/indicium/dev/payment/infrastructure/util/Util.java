@@ -1,5 +1,6 @@
 package hu.indicium.dev.payment.infrastructure.util;
 
+import java.text.DecimalFormat;
 import java.util.Date;
 
 public class Util {
@@ -41,5 +42,10 @@ public class Util {
 
         long curTimeInMs = beforeTime.getTime();
         return new Date(curTimeInMs + (minutes * ONE_MINUTE_IN_MILLIS));
+    }
+
+    public static String formatCurrency(Double amount) {
+        DecimalFormat decimalFormat = new DecimalFormat("0.00");
+        return decimalFormat.format(amount);
     }
 }

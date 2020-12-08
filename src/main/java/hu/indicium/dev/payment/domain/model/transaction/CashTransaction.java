@@ -1,5 +1,6 @@
 package hu.indicium.dev.payment.domain.model.transaction;
 
+import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -13,5 +14,15 @@ public class CashTransaction extends Transaction {
         super(transactionId, amount);
         this.setStatus(TransactionStatus.PAID);
         this.setFinishedAt(new Date());
+    }
+
+    @Override
+    public void updateTransaction(BaseDetails updatedTransactionInfo) {
+        throw new IllegalStateException("Cash transactions can't be updated.");
+    }
+
+    @Override
+    public TransactionType getType() {
+        return TransactionType.CASH;
     }
 }

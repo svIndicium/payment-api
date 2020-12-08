@@ -3,7 +3,6 @@ package hu.indicium.dev.payment.domain.model.payment;
 import hu.indicium.dev.payment.domain.AssertionConcern;
 import hu.indicium.dev.payment.domain.model.transaction.Transaction;
 import hu.indicium.dev.payment.domain.model.transaction.TransactionId;
-import hu.indicium.dev.payment.domain.model.transaction.UpdatableTransaction;
 import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -97,12 +96,9 @@ public class Payment extends AssertionConcern {
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Transaction %s not found in payment %s", transactionId.getId().toString(), this.getPaymentId().getId().toString())));
     }
 
-    public <T extends BaseDetails> void updateTransaction(TransactionId transactionId, T baseDetails) {
+    public void updateTransaction(TransactionId transactionId, BaseDetails baseDetails) {
         Transaction transaction = getTransactionById(transactionId);
-        if (transaction instanceof UpdatableTransaction) {
-            ((UpdatableTransaction<T>) transaction).updateTransaction(baseDetails);
-            return;
-        }
+        transaction.updateTransaction(baseDetails);
         throw new RuntimeException("Transaction not updatable.");
     }
 
