@@ -62,23 +62,24 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     private Transaction toTransaction(TransactionId transactionId, NewTransactionCommand newTransactionCommand) {
-        if (newTransactionCommand.getMethod().equals("cash")) {
-            return new CashTransaction(transactionId, newTransactionCommand.getAmount());
-        } else if (newTransactionCommand.getMethod().equals("transfer")) {
-            return new TransferTransaction(transactionId, newTransactionCommand.getAmount());
-        } else if (newTransactionCommand.getMethod().equals("ideal")) {
-            PaymentObject paymentObject = paymentProvider.createPayment(new PaymentDetails(transactionId, newTransactionCommand.getDescription(), newTransactionCommand.getRedirectUrl(), newTransactionCommand.getAmount()));
-            IDealTransaction iDealTransaction = IDealTransaction.builder()
-                    .checkoutUrl(paymentObject.getCheckoutUrl())
-                    .webhookUrl(paymentObject.getWebhookUrl())
-                    .expiresAt(paymentObject.getExpiresAt())
-                    .redirectUrl(paymentObject.getRedirectUrl())
-                    .externalId(paymentObject.getExternalId())
-                    .paymentProvider(paymentObject.getPaymentProvider())
-                    .build();
-            iDealTransaction.setTransactionId(transactionId);
-            iDealTransaction.setAmount(newTransactionCommand.getAmount());
-            return iDealTransaction;
+        switch (newTransactionCommand.getMethod()) {
+            case "cash":
+                return new CashTransaction(transactionId, newTransactionCommand.getAmount());
+            case "transfer":
+                return new TransferTransaction(transactionId, newTransactionCommand.getAmount());
+            case "ideal":
+                PaymentObject paymentObject = paymentProvider.createPayment(new PaymentDetails(transactionId, newTransactionCommand.getDescription(), newTransactionCommand.getRedirectUrl(), newTransactionCommand.getAmount()));
+                IDealTransaction iDealTransaction = IDealTransaction.builder()
+                        .checkoutUrl(paymentObject.getCheckoutUrl())
+                        .webhookUrl(paymentObject.getWebhookUrl())
+                        .expiresAt(paymentObject.getExpiresAt())
+                        .redirectUrl(paymentObject.getRedirectUrl())
+                        .externalId(paymentObject.getExternalId())
+                        .paymentProvider(paymentObject.getPaymentProvider())
+                        .build();
+                iDealTransaction.setTransactionId(transactionId);
+                iDealTransaction.setAmount(newTransactionCommand.getAmount());
+                return iDealTransaction;
         }
         throw new RuntimeException("Transaction method not implemented");
     }
