@@ -39,7 +39,7 @@ public class MollieProvider implements PaymentProvider {
                     .amount(amount1)
                     .redirectUrl(Optional.of(paymentDetails.getRedirectUrl()))
                     .description(paymentDetails.getDescription())
-                    .webhookUrl(Optional.of(settingService.getValueByKey("WEBHOOK_URL")))
+                    .webhookUrl(Optional.of(settingService.getValueByKey("MOLLIE_WEBHOOK_URL")))
                     .metadata(metadata)
                     .build();
             PaymentResponse paymentResponse = client.payments().createPayment(paymentRequest);
