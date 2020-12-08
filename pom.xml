@@ -28,6 +28,11 @@
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+
+		<dependency>
 			<groupId>be.woutschoovaerts</groupId>
 			<artifactId>mollie</artifactId>
 			<version>3.0.1</version>
