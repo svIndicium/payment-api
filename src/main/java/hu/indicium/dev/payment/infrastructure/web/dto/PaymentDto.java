@@ -11,6 +11,8 @@ import java.util.UUID;
 public class PaymentDto {
     private UUID id;
 
+    private String memberId;
+
     private double amount;
 
     private double openAmount;
@@ -25,6 +27,7 @@ public class PaymentDto {
 
     public PaymentDto(Payment payment) {
         this.id = payment.getPaymentId().getId();
+        this.memberId = payment.getMemberId().getAuthId();
         this.amount = payment.getAmount();
         this.status = payment.getPaymentStatus();
         this.description = payment.getPaymentDetails().getDescription();

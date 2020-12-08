@@ -7,4 +7,6 @@ public class NewPaymentCommand {
     private String description;
 
     private double amount;
+
+    private String authId;
 }

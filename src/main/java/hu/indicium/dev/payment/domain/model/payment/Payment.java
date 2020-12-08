@@ -1,6 +1,7 @@
 package hu.indicium.dev.payment.domain.model.payment;
 
 import hu.indicium.dev.payment.domain.AssertionConcern;
+import hu.indicium.dev.payment.domain.model.member.MemberId;
 import hu.indicium.dev.payment.domain.model.transaction.Transaction;
 import hu.indicium.dev.payment.domain.model.transaction.TransactionId;
 import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
@@ -21,6 +22,9 @@ public class Payment extends AssertionConcern {
     private Double amount;
 
     @Embedded
+    private MemberId memberId;
+
+    @Embedded
     private PaymentDetails paymentDetails;
 
     private PaymentStatus paymentStatus;
@@ -28,7 +32,7 @@ public class Payment extends AssertionConcern {
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
     private Set<Transaction> transactions = new HashSet<>();
 
-    public Payment(PaymentId paymentId, Double amount, PaymentDetails paymentDetails) {
+    public Payment(PaymentId paymentId, MemberId memberId, Double amount, PaymentDetails paymentDetails) {
         this.setPaymentId(paymentId);
         this.setAmount(amount);
         this.setPaymentStatus(PaymentStatus.OPEN);
@@ -79,6 +83,12 @@ public class Payment extends AssertionConcern {
         assertArgumentNotNull(paymentDetails, "Betalingsgegevens moet worden meegegeven.");
 
         this.paymentDetails = paymentDetails;
+    }
+
+    private void setMemberId(MemberId memberId) {
+        assertArgumentNotNull(memberId, "GebruikersID moet worden meegegeven.");
+
+        this.memberId = memberId;
     }
 
     public void assignTransaction(Transaction transaction) {

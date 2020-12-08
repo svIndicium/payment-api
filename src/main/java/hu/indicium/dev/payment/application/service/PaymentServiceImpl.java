@@ -1,6 +1,7 @@
 package hu.indicium.dev.payment.application.service;
 
 import hu.indicium.dev.payment.application.commands.NewPaymentCommand;
+import hu.indicium.dev.payment.domain.model.member.MemberId;
 import hu.indicium.dev.payment.domain.model.payment.Payment;
 import hu.indicium.dev.payment.domain.model.payment.PaymentDetails;
 import hu.indicium.dev.payment.domain.model.payment.PaymentId;
@@ -20,7 +21,9 @@ public class PaymentServiceImpl implements PaymentService {
 
         PaymentDetails paymentDetails = new PaymentDetails(newPaymentCommand.getDescription());
 
-        Payment payment = new Payment(paymentId, newPaymentCommand.getAmount(), paymentDetails);
+        MemberId memberId = MemberId.fromAuthId(newPaymentCommand.getAuthId());
+
+        Payment payment = new Payment(paymentId, memberId, newPaymentCommand.getAmount(), paymentDetails);
 
         paymentRepository.save(payment);
 
