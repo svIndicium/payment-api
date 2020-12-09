@@ -12,7 +12,7 @@ import java.io.Serializable;
 @Getter
 public class MemberId implements Serializable {
 
-    @Column(name = "member_id", unique = true)
+    @Column(name = "member_id")
     private String authId;
 
     public MemberId(String authId) {

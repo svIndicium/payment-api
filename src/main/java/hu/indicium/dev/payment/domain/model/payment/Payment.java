@@ -35,6 +35,7 @@ public class Payment extends AssertionConcern {
     public Payment(PaymentId paymentId, MemberId memberId, Double amount, PaymentDetails paymentDetails) {
         this.setPaymentId(paymentId);
         this.setAmount(amount);
+        this.setMemberId(memberId);
         this.setPaymentStatus(PaymentStatus.OPEN);
         this.setPaymentDetails(paymentDetails);
     }
