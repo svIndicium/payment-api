@@ -2,6 +2,7 @@ package hu.indicium.dev.payment.domain.model.transaction;
 
 import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
 import hu.indicium.dev.payment.domain.model.transaction.info.IDealDetails;
+import hu.indicium.dev.payment.domain.model.transaction.info.TransferDetails;
 import lombok.*;
 
 import javax.persistence.Entity;
@@ -43,6 +44,11 @@ public class IDealTransaction extends Transaction {
 
     @Override
     public void updateTransaction(BaseDetails updatedTransactionInfo) {
+        if (updatedTransactionInfo instanceof IDealDetails) {
+            IDealDetails iDealDetails = (IDealDetails) updatedTransactionInfo;
+            this.setStatus(iDealDetails.getTransactionStatus());
+            this.setFinishedAt(iDealDetails.getTransferredAt());
+        }
     }
 
     @Override

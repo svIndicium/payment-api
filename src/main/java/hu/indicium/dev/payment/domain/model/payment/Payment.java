@@ -29,7 +29,7 @@ public class Payment extends AssertionConcern {
 
     private PaymentStatus paymentStatus;
 
-    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<Transaction> transactions = new HashSet<>();
 
     public Payment(PaymentId paymentId, MemberId memberId, Double amount, PaymentDetails paymentDetails) {
@@ -110,7 +110,13 @@ public class Payment extends AssertionConcern {
     public void updateTransaction(TransactionId transactionId, BaseDetails baseDetails) {
         Transaction transaction = getTransactionById(transactionId);
         transaction.updateTransaction(baseDetails);
-        throw new RuntimeException("Transaction not updatable.");
+        this.updateStatus();
+    }
+
+    private void updateStatus() {
+        if (this.getRemainingAmount() == 0.0) {
+            this.setPaymentStatus(PaymentStatus.PAID);
+        }
     }
 
 }

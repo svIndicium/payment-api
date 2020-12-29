@@ -16,9 +16,9 @@ public class DetailFactory {
             case CASH:
                 throw new IllegalStateException("Betaal methode niet aanpasbaar.");
             case IDEAL:
-                return new IDealDetails();
+                return new IDealDetails(request.getTransactionStatus(), request.getTransferredAt());
             case TRANSFER:
-                return new TransferDetails(request.getTransactionStatus(), request.getDescription(), request.getTransferredAt(), request.getPaid());
+                return new TransferDetails(request.getTransactionStatus(), request.getTransferredAt(), request.getDescription(), request.getPaid());
         }
         throw new IllegalStateException("Betaal methode niet ondersteund.");
     }

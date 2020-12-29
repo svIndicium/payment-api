@@ -21,4 +21,6 @@ public interface PaymentObject {
     String getWebhookUrl();
 
     String getRedirectUrl();
+
+    Date getPaidAt();
 }

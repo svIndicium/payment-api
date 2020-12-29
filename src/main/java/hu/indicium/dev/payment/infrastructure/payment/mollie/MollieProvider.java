@@ -49,4 +49,15 @@ public class MollieProvider implements PaymentProvider {
             throw new IllegalStateException("Mollie:" + e.getMessage());
         }
     }
+
+    @Override
+    public PaymentObject getPaymentByExternalId(String externalTransactionId) {
+        try {
+            PaymentResponse paymentResponse = client.payments().getPayment(externalTransactionId);
+            return new MolliePayment(paymentResponse);
+        } catch (MollieException e) {
+            e.printStackTrace();
+            throw new IllegalStateException("Mollie:" + e.getMessage());
+        }
+    }
 }

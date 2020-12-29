@@ -49,6 +49,10 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @PreAuthorize("hasPermission('admin:payment')")
     public void updateTransaction(UpdateTransactionCommand updateTransactionCommand) {
+        this.update(updateTransactionCommand);
+    }
+
+    public void update(UpdateTransactionCommand updateTransactionCommand) {
         PaymentId paymentId = PaymentId.fromId(updateTransactionCommand.getPaymentId());
 
         Payment payment = paymentRepository.getPaymentById(paymentId);

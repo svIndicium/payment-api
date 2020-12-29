@@ -13,14 +13,11 @@ import java.util.Date;
 public class TransferDetails extends BaseDetails {
     private String description;
 
-    private Date transferredAt;
-
     private transient Double paid;
 
-    public TransferDetails(TransactionStatus transactionStatus, String description, Date transferredAt, Double paid) {
-        super(transactionStatus);
+    public TransferDetails(TransactionStatus transactionStatus, Date transferredAt, String description, Double paid) {
+        super(transactionStatus, transferredAt);
         this.description = description;
-        this.transferredAt = transferredAt;
         this.paid = paid;
     }
 }

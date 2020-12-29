@@ -4,4 +4,6 @@ import hu.indicium.dev.payment.domain.model.transaction.TransactionId;
 
 public interface PaymentProvider {
     PaymentObject createPayment(PaymentDetails paymentDetails);
+
+    PaymentObject getPaymentByExternalId(String externalTransactionId);
 }

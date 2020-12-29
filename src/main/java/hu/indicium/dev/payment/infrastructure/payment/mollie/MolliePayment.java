@@ -25,6 +25,8 @@ public class MolliePayment implements PaymentObject {
 
     private String redirectUrl;
 
+    private Date paidAt;
+
     public MolliePayment(PaymentResponse paymentResponse) {
         this.externalId = paymentResponse.getId();
         Map<String, Object> metadata = paymentResponse.getMetadata();
@@ -32,8 +34,12 @@ public class MolliePayment implements PaymentObject {
         UUID uuid = UUID.fromString(id);
         this.transactionId = TransactionId.fromId(uuid);
         this.transactionStatus = getTransactionStatus(paymentResponse.getStatus());
-        this.expiresAt = paymentResponse.getExpiresAt();
-        this.checkoutUrl = paymentResponse.getLinks().getCheckout().getHref();
+        if (this.transactionStatus.equals(TransactionStatus.PENDING) || this.transactionStatus.equals(TransactionStatus.OPEN)) {
+            this.expiresAt = paymentResponse.getExpiresAt();
+            this.checkoutUrl = paymentResponse.getLinks().getCheckout().getHref();
+        } else if (this.transactionStatus.equals(TransactionStatus.PAID)) {
+            this.paidAt = paymentResponse.getPaidAt().orElse(new Date());
+        }
         this.webhookUrl = paymentResponse.getWebhookUrl().orElse("not found");
         this.redirectUrl = paymentResponse.getRedirectUrl();
     }
@@ -76,6 +82,11 @@ public class MolliePayment implements PaymentObject {
     @Override
     public String getRedirectUrl() {
         return redirectUrl;
+    }
+
+    @Override
+    public Date getPaidAt() {
+        return paidAt;
     }
 
     private TransactionStatus getTransactionStatus(String status) {
