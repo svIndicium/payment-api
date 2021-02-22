@@ -11,10 +11,13 @@ env:
   DB_URL: jdbc:postgresql://localhost:5432/postgres
   DB_USER: postgres
   DB_PASS: postgres
-  API_AUDIENCE: ${{ secrets.API_AUDIENCE }}
-  ISSUER: ${{ secrets.ISSUER }}
   CLIENT_ID: ${{ secrets.CLIENT_ID }}
   CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+  JWK_SET_URI: ${{secrets.JWK_SET_URI}}
+  AUTH_URI: ${{secrets.AUTH_URI}}
+  TOKEN_URI: ${{secrets.TOKEN_URI}}
+  KEYCLOAK_URL: ${{secrets.KEYCLOAK_URL}}
+  KEYCLOAK_REALM: ${{secrets.KEYCLOAK_REALM}}
 
 jobs:
   # Run tests.
