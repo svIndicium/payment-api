@@ -1,6 +1,7 @@
 package hu.indicium.dev.payment.infrastructure.web.config;
 
-import com.auth0.spring.security.api.JwtWebSecurityConfigurer;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -16,7 +17,10 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final ObjectMapper objectMapper;
 
     @Value("${auth0.apiAudience}")
     private String apiAudience;
@@ -26,25 +30,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        JwtWebSecurityConfigurer
-                .forRS256(apiAudience, issuer)
-                .configure(http)
-                .cors()
+        http.cors()
                 .and()
                 .authorizeRequests()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .anyRequest().permitAll();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        final CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(List.of("*"));
-        configuration.setAllowedMethods(List.of("HEAD", "GET", "POST", "PUT", "DELETE", "PATCH"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(List.of("Authorization", "Cache-Control", "Content-Type"));
-        final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+                .anyRequest().authenticated()
+                .and()
+                .oauth2ResourceServer()
+                .jwt()
+                .jwtAuthenticationConverter(new OpenIDConnectJwtConverter())
+                .and()
+                .accessDeniedHandler(new CustomAccessDeniedHandler(objectMapper))
+                .authenticationEntryPoint(new CustomAuthenticationEntrypoint(objectMapper));
     }
 }

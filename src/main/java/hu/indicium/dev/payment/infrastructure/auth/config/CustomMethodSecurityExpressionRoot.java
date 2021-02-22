@@ -47,10 +47,14 @@ public class CustomMethodSecurityExpressionRoot extends SecurityExpressionRoot i
 
     public boolean hasPermission(String permission) {
         for (GrantedAuthority grantedAuthority : authentication.getAuthorities()) {
-            if (grantedAuthority.getAuthority().equals("payment/" + permission)) {
+            if (grantedAuthority.getAuthority().equals("SCOPE_payment-api/" + permission)) {
                 return true;
             }
         }
         return false;
+    }
+
+    public boolean userIdEquals(String userId) {
+        return authentication.getName().equals(userId);
     }
 }
