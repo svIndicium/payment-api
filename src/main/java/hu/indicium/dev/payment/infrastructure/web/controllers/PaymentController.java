@@ -13,6 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static hu.indicium.dev.payment.infrastructure.util.BaseUrl.API_V1;
@@ -35,6 +36,17 @@ public class PaymentController {
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()
                 .data(paymentDtos)
+                .build();
+    }
+
+    @GetMapping( "/payments/{paymentUuid}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<PaymentDto> getPaymentById(@PathVariable UUID paymentUuid) {
+        PaymentId paymentId = PaymentId.fromId(paymentUuid);
+        Payment payment = paymentQueryService.getPaymentById(paymentId);
+        PaymentDto paymentDto = new PaymentDto(payment);
+        return ResponseBuilder.ok()
+                .data(paymentDto)
                 .build();
     }
 
