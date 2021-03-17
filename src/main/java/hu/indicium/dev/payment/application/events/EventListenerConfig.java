@@ -20,7 +20,6 @@ public class EventListenerConfig implements CommandLineRunner {
     @Override
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void run(String... args) throws Exception {
-        System.out.println("hoi");
         List<DomainEventSubscriber> subscribers = Arrays.asList(
             new PaymentUpdatedListener(eventService)
         );
