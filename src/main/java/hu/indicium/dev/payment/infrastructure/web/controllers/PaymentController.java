@@ -64,7 +64,7 @@ public class PaymentController {
 
     @GetMapping("/members/{memberUuid}/payments")
     @ResponseStatus(HttpStatus.OK)
-    public Response<Collection<PaymentDto>> getPaymentsbyMemberId(@PathVariable("memberUuid") String memberUuid) {
+    public Response<Collection<PaymentDto>> getPaymentsByMemberId(@PathVariable("memberUuid") String memberUuid) {
         MemberId memberId = MemberId.fromAuthId(memberUuid);
         Collection<Payment> payments = paymentQueryService.getPaymentsByMemberId(memberId);
         Collection<PaymentDto> paymentDtos = payments.stream()
