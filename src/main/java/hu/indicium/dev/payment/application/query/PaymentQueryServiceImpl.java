@@ -1,5 +1,6 @@
 package hu.indicium.dev.payment.application.query;
 
+import hu.indicium.dev.payment.domain.model.member.MemberId;
 import hu.indicium.dev.payment.domain.model.payment.Payment;
 import hu.indicium.dev.payment.domain.model.payment.PaymentId;
 import hu.indicium.dev.payment.domain.model.payment.PaymentRepository;
@@ -26,5 +27,11 @@ public class PaymentQueryServiceImpl implements PaymentQueryService {
     @PreAuthorize("hasPermission('admin:payment')")
     public Collection<Payment> getAllPayments() {
         return paymentRepository.getAllPayments();
+    }
+
+    @Override
+    @PreAuthorize("hasPermission('admin:payment') || (hasPermission('read:payment') && #memberId == principal)")
+    public Collection<Payment> getPaymentsByMemberId(MemberId memberId) {
+        return paymentRepository.getPaymentsByMemberId(memberId);
     }
 }

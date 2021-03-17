@@ -1,5 +1,6 @@
 package hu.indicium.dev.payment.infrastructure.persistency;
 
+import hu.indicium.dev.payment.domain.model.member.MemberId;
 import hu.indicium.dev.payment.domain.model.payment.Payment;
 import hu.indicium.dev.payment.domain.model.payment.PaymentId;
 import hu.indicium.dev.payment.domain.model.payment.PaymentRepository;
@@ -41,5 +42,10 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     @Override
     public Collection<Payment> getAllPayments() {
         return paymentRepository.findAll();
+    }
+
+    @Override
+    public Collection<Payment> getPaymentsByMemberId(MemberId memberId) {
+        return paymentRepository.getPaymentsByMemberId(memberId);
     }
 }

@@ -1,5 +1,7 @@
 package hu.indicium.dev.payment.domain.model.payment;
 
+import hu.indicium.dev.payment.domain.model.member.MemberId;
+
 import java.util.Collection;
 
 public interface PaymentRepository {
@@ -10,4 +12,6 @@ public interface PaymentRepository {
     Payment save(Payment payment);
 
     Collection<Payment> getAllPayments();
+
+    Collection<Payment> getPaymentsByMemberId(MemberId memberId);
 }

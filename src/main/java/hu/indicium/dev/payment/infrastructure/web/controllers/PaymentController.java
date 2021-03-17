@@ -3,6 +3,7 @@ package hu.indicium.dev.payment.infrastructure.web.controllers;
 import hu.indicium.dev.payment.application.commands.NewPaymentCommand;
 import hu.indicium.dev.payment.application.query.PaymentQueryService;
 import hu.indicium.dev.payment.application.service.PaymentService;
+import hu.indicium.dev.payment.domain.model.member.MemberId;
 import hu.indicium.dev.payment.domain.model.payment.Payment;
 import hu.indicium.dev.payment.domain.model.payment.PaymentId;
 import hu.indicium.dev.payment.infrastructure.util.Response;
@@ -59,5 +60,19 @@ public class PaymentController {
         return ResponseBuilder.created()
                 .data(paymentDto)
                 .build();
+    }
+
+    @GetMapping("/members/{memberUuid}/payments")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<Collection<PaymentDto>> getPaymentsbyMemberId(@PathVariable("memberUuid") String memberUuid) {
+        MemberId memberId = MemberId.fromAuthId(memberUuid);
+        Collection<Payment> payments = paymentQueryService.getPaymentsByMemberId(memberId);
+        Collection<PaymentDto> paymentDtos = payments.stream()
+                .map(PaymentDto::new)
+                .collect(Collectors.toSet());
+        return ResponseBuilder.ok()
+                .data(paymentDtos)
+                .build();
+
     }
 }
