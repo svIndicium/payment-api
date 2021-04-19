@@ -18,7 +18,7 @@ public class PaymentQueryServiceImpl implements PaymentQueryService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    @PostAuthorize("hasPermission('admin:payment') || (hasPermission('read:payment') && returnObject.memberId == principal)")
+    @PostAuthorize("hasPermission('admin:payment') || (hasPermission('read:payment') && userIdEquals(returnObject.memberId.authId))")
     public Payment getPaymentById(PaymentId paymentId) {
         return paymentRepository.getPaymentById(paymentId);
     }
@@ -30,7 +30,7 @@ public class PaymentQueryServiceImpl implements PaymentQueryService {
     }
 
     @Override
-    @PreAuthorize("hasPermission('admin:payment') || (hasPermission('read:payment') && #memberId == principal)")
+    @PreAuthorize("hasPermission('admin:payment') || (hasPermission('read:payment') && userIdEquals(#memberId.authId))")
     public Collection<Payment> getPaymentsByMemberId(MemberId memberId) {
         return paymentRepository.getPaymentsByMemberId(memberId);
     }

@@ -18,7 +18,7 @@ public class TransactionQueryServiceImpl implements TransactionQueryService {
     private final TransactionRepository transactionRepository;
 
     @Override
-    @PostAuthorize("hasPermission('admin:payment') || (hasPermission('read:payment') && returnObject.payment.memberId == principal)")
+    @PostAuthorize("hasPermission('admin:payment') || (hasPermission('read:payment') && userIdEquals(returnObject.payment.memberId.authId))")
     public Transaction getTransactionById(TransactionId transactionId) {
         return transactionRepository.getTransactionById(transactionId);
     }
@@ -30,7 +30,7 @@ public class TransactionQueryServiceImpl implements TransactionQueryService {
     }
 
     @Override
-    @PostAuthorize("hasPermission('admin:payment') || (hasPermission('read:payment') && returnObject[0].payment.memberId == principal)")
+    @PostAuthorize("hasPermission('admin:payment') || (hasPermission('read:payment') && userIdEquals(returnObject[0].payment.memberId.authId))")
     public Collection<Transaction> getAllTransactionsByPaymentId(PaymentId paymentId) {
         return transactionRepository.getTransactionsByPaymentId(paymentId);
     }
