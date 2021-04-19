@@ -56,7 +56,7 @@ public class Payment extends AssertionConcern {
     public Double getOpenAmount() {
         Double open = 0.0;
         for (Transaction transaction : transactions) {
-            if (!transaction.isPending() || !transaction.isPaid()) {
+            if (transaction.isPending() || transaction.isPaid()) {
                 open += transaction.getAmount();
             }
         }
