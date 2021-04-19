@@ -1,6 +1,7 @@
 package hu.indicium.dev.payment.domain.model.payment;
 
 import hu.indicium.dev.payment.domain.AssertionConcern;
+import hu.indicium.dev.payment.domain.DomainEventPublisher;
 import hu.indicium.dev.payment.domain.model.member.MemberId;
 import hu.indicium.dev.payment.domain.model.transaction.Transaction;
 import hu.indicium.dev.payment.domain.model.transaction.TransactionId;
@@ -74,10 +75,12 @@ public class Payment extends AssertionConcern {
         this.amount = amount;
     }
 
-    private void setPaymentStatus(PaymentStatus paymentStatus) {
+    public void setPaymentStatus(PaymentStatus paymentStatus) {
         assertArgumentNotNull(paymentStatus, "Betalingstatus moet worden meegegeven.");
 
         this.paymentStatus = paymentStatus;
+        DomainEventPublisher.instance()
+                .publish(new PaymentUpdated(this));
     }
 
     private void setPaymentDetails(PaymentDetails paymentDetails) {
@@ -98,6 +101,7 @@ public class Payment extends AssertionConcern {
 
         transaction.setPayment(this);
         this.transactions.add(transaction);
+        this.updateStatus();
     }
 
     private Transaction getTransactionById(TransactionId transactionId) {

@@ -3,6 +3,7 @@ package hu.indicium.dev.payment.infrastructure.web.controllers;
 import hu.indicium.dev.payment.application.commands.NewPaymentCommand;
 import hu.indicium.dev.payment.application.query.PaymentQueryService;
 import hu.indicium.dev.payment.application.service.PaymentService;
+import hu.indicium.dev.payment.domain.model.member.MemberId;
 import hu.indicium.dev.payment.domain.model.payment.Payment;
 import hu.indicium.dev.payment.domain.model.payment.PaymentId;
 import hu.indicium.dev.payment.infrastructure.util.Response;
@@ -13,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Collection;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import static hu.indicium.dev.payment.infrastructure.util.BaseUrl.API_V1;
@@ -38,6 +40,17 @@ public class PaymentController {
                 .build();
     }
 
+    @GetMapping( "/payments/{paymentUuid}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<PaymentDto> getPaymentById(@PathVariable UUID paymentUuid) {
+        PaymentId paymentId = PaymentId.fromId(paymentUuid);
+        Payment payment = paymentQueryService.getPaymentById(paymentId);
+        PaymentDto paymentDto = new PaymentDto(payment);
+        return ResponseBuilder.ok()
+                .data(paymentDto)
+                .build();
+    }
+
     @PostMapping("/payments")
     @ResponseStatus(HttpStatus.CREATED)
     public Response<PaymentDto> createPayment(@RequestBody NewPaymentCommand newPaymentCommand) {
@@ -47,5 +60,19 @@ public class PaymentController {
         return ResponseBuilder.created()
                 .data(paymentDto)
                 .build();
+    }
+
+    @GetMapping("/members/{memberUuid}/payments")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<Collection<PaymentDto>> getPaymentsByMemberId(@PathVariable("memberUuid") String memberUuid) {
+        MemberId memberId = MemberId.fromAuthId(memberUuid);
+        Collection<Payment> payments = paymentQueryService.getPaymentsByMemberId(memberId);
+        Collection<PaymentDto> paymentDtos = payments.stream()
+                .map(PaymentDto::new)
+                .collect(Collectors.toSet());
+        return ResponseBuilder.ok()
+                .data(paymentDtos)
+                .build();
+
     }
 }
