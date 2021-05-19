@@ -19,6 +19,11 @@
       "name": "auth0.clientId",
       "type": "java.lang.String",
       "description": "Description for auth0.clientId."
+    },
+    {
+      "name": "hu.indicium.mq.exchange-name",
+      "type": "java.lang.String",
+      "description": "Description for hu.indicium.mq.exchange-name."
     }
   ]
 }

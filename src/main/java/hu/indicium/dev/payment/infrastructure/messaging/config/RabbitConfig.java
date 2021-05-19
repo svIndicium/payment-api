@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-    @Value("${RABBITMQ_TOPIC_EXCHANGE_NAME}")
+    @Value("${hu.indicium.mq.exchange-name}")
     private String topicExchangeName;
 
     @Bean
