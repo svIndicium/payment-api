@@ -8,12 +8,12 @@ import lombok.Getter;
 import java.util.UUID;
 
 @Getter
-public class PaymentUpdatedEvent extends QueueableEvent {
+public class PaymentUpdatedEvent extends Event {
 
     private final UUID paymentId;
 
     public PaymentUpdatedEvent(Payment payment) {
-        super("hu.indicium.api.members", "payment", 1);
+        super("service.members.payments", 1);
         this.paymentId = payment.getPaymentId().getId();
     }
 }
