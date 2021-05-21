@@ -18,6 +18,7 @@ env:
   TOKEN_URI: ${{secrets.TOKEN_URI}}
   KEYCLOAK_URL: ${{secrets.KEYCLOAK_URL}}
   KEYCLOAK_REALM: ${{secrets.KEYCLOAK_REALM}}
+  RABBITMQ_TOPIC_EXCHANGE_NAME: testing
 
 jobs:
   # Run tests.
