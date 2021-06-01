@@ -17,7 +17,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentRepository paymentRepository;
 
     @Override
-    @PreAuthorize("hasPermission('create:payment')")
+    @PreAuthorize("hasPermission('admin:payment') || (hasPermission('create:payment') && userIdEquals(#newPaymentCommand.authId))")
     public PaymentId createPayment(NewPaymentCommand newPaymentCommand) {
         PaymentId paymentId = paymentRepository.nextIdentity();
 

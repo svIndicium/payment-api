@@ -1,12 +1,12 @@
 package hu.indicium.dev.payment.application.service;
 
-import hu.indicium.dev.payment.application.commands.*;
+import hu.indicium.dev.payment.application.commands.NewTransactionCommand;
+import hu.indicium.dev.payment.application.commands.UpdateTransactionCommand;
 import hu.indicium.dev.payment.domain.model.payment.Payment;
 import hu.indicium.dev.payment.domain.model.payment.PaymentId;
 import hu.indicium.dev.payment.domain.model.payment.PaymentRepository;
 import hu.indicium.dev.payment.domain.model.transaction.*;
 import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
-import hu.indicium.dev.payment.domain.model.transaction.info.TransferDetails;
 import hu.indicium.dev.payment.infrastructure.payment.PaymentDetails;
 import hu.indicium.dev.payment.infrastructure.payment.PaymentObject;
 import hu.indicium.dev.payment.infrastructure.payment.PaymentProvider;
@@ -33,6 +33,13 @@ public class TransactionServiceImpl implements TransactionService {
 
         Payment payment = paymentRepository.getPaymentById(paymentId);
 
+        this.assignTransactionToPayment(transactionId, newTransactionCommand, payment);
+
+        return transactionId;
+    }
+
+    @PreAuthorize("userIdEquals(payment.memberId.authId) || hasPermission('admin:payment')")
+    private void assignTransactionToPayment(TransactionId transactionId, NewTransactionCommand newTransactionCommand, Payment payment) {
         if (!payment.canAcceptTransactionAmount(newTransactionCommand.getAmount())) {
             throw new IllegalArgumentException("Er is te veel betaald.");
         }
@@ -42,8 +49,6 @@ public class TransactionServiceImpl implements TransactionService {
         payment.assignTransaction(transaction);
 
         paymentRepository.save(payment);
-
-        return transactionId;
     }
 
     @Override
