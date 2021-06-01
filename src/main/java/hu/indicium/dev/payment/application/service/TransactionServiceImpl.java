@@ -25,7 +25,7 @@ public class TransactionServiceImpl implements TransactionService {
     private final PaymentProvider paymentProvider;
 
     @Override
-    @PreAuthorize("hasPermission('create:transaction')")
+    @PreAuthorize("(hasPermission('create:transaction') && #newTransactionCommand.method != 'cash') || (hasPermission('create:transaction') && #newTransactionCommand.method == 'cash' && hasPermission('admin:payment'))")
     public TransactionId createTransaction(NewTransactionCommand newTransactionCommand) {
         TransactionId transactionId = transactionRepository.nextIdentity();
 
