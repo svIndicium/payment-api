@@ -2,6 +2,7 @@ package hu.indicium.dev.payment.infrastructure.web.dto;
 
 import hu.indicium.dev.payment.domain.model.transaction.Transaction;
 import hu.indicium.dev.payment.domain.model.transaction.TransactionStatus;
+import hu.indicium.dev.payment.domain.model.transaction.TransactionType;
 import lombok.Data;
 
 import java.util.Date;
@@ -23,6 +24,8 @@ public class TransactionDto {
 
     private Date finishedAt;
 
+    private TransactionType type;
+
     public TransactionDto(Transaction transaction) {
         this.id = transaction.getTransactionId().getId();
         this.status = transaction.getStatus();
@@ -31,5 +34,6 @@ public class TransactionDto {
         this.createdAt = transaction.getCreatedAt();
         this.updatedAt = transaction.getUpdatedAt();
         this.finishedAt = transaction.getFinishedAt();
+        this.type = transaction.getType();
     }
 }
