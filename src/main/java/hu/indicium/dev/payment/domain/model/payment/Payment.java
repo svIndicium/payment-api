@@ -37,7 +37,7 @@ public class Payment extends AssertionConcern {
         this.setPaymentId(paymentId);
         this.setAmount(amount);
         this.setMemberId(memberId);
-        this.setPaymentStatus(PaymentStatus.OPEN);
+        this.setPaymentStatusWithoutEvent(PaymentStatus.OPEN);
         this.setPaymentDetails(paymentDetails);
     }
 
@@ -76,11 +76,15 @@ public class Payment extends AssertionConcern {
     }
 
     public void setPaymentStatus(PaymentStatus paymentStatus) {
+        this.setPaymentStatusWithoutEvent(paymentStatus);
+        DomainEventPublisher.instance()
+                .publish(new PaymentUpdated(this));
+    }
+
+    public void setPaymentStatusWithoutEvent(PaymentStatus paymentStatus) {
         assertArgumentNotNull(paymentStatus, "Betalingstatus moet worden meegegeven.");
 
         this.paymentStatus = paymentStatus;
-        DomainEventPublisher.instance()
-                .publish(new PaymentUpdated(this));
     }
 
     private void setPaymentDetails(PaymentDetails paymentDetails) {

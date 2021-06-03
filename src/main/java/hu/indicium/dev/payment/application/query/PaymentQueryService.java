@@ -12,4 +12,6 @@ public interface PaymentQueryService {
     Collection<Payment> getAllPayments();
 
     Collection<Payment> getPaymentsByMemberId(MemberId memberId);
+
+    Collection<Payment> getPaymentsWithOpenTransferTransactions();
 }

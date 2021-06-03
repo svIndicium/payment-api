@@ -40,6 +40,18 @@ public class PaymentController {
                 .build();
     }
 
+    @GetMapping( "/payments/transfer")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<Collection<PaymentDto>> getPaymentsWithOpenTransferTransaction() {
+        Collection<Payment> payments = paymentQueryService.getPaymentsWithOpenTransferTransactions();
+        Collection<PaymentDto> paymentDtos = payments.stream()
+                .map(PaymentDto::new)
+                .collect(Collectors.toSet());
+        return ResponseBuilder.ok()
+                .data(paymentDtos)
+                .build();
+    }
+
     @GetMapping( "/payments/{paymentUuid}")
     @ResponseStatus(HttpStatus.OK)
     public Response<PaymentDto> getPaymentById(@PathVariable UUID paymentUuid) {

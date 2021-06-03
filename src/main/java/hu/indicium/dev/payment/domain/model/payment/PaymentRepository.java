@@ -13,5 +13,7 @@ public interface PaymentRepository {
 
     Collection<Payment> getAllPayments();
 
+    Collection<Payment> getPaymentsWithOpenTransferTransactions();
+
     Collection<Payment> getPaymentsByMemberId(MemberId memberId);
 }

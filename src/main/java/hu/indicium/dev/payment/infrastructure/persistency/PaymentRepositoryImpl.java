@@ -45,6 +45,11 @@ public class PaymentRepositoryImpl implements PaymentRepository {
     }
 
     @Override
+    public Collection<Payment> getPaymentsWithOpenTransferTransactions() {
+        return paymentRepository.getPaymentByOpenTransferTransactions();
+    }
+
+    @Override
     public Collection<Payment> getPaymentsByMemberId(MemberId memberId) {
         return paymentRepository.getPaymentsByMemberId(memberId);
     }

@@ -29,6 +29,8 @@ public class TransferTransaction extends Transaction {
         if (updatedTransactionInfo instanceof TransferDetails) {
             TransferDetails transferDetails = (TransferDetails) updatedTransactionInfo;
             if (transferDetails.getTransactionStatus().equals(TransactionStatus.PAID)) {
+                this.description = transferDetails.getDescription();
+                this.transferredAt = transferDetails.getTransferredAt();
                 finishTransaction(transferDetails);
             }
         }
