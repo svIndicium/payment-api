@@ -33,6 +33,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                 .build();
 
         log.error(accessDeniedException.getMessage());
+        log.error(request.getHeader("Authorization"));
 
         String body = objectMapper.writeValueAsString(error);
 
