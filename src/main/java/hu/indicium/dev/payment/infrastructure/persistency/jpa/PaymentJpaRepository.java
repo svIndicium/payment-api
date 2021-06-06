@@ -5,6 +5,7 @@ import hu.indicium.dev.payment.domain.model.payment.Payment;
 import hu.indicium.dev.payment.domain.model.payment.PaymentId;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Collection;
@@ -21,4 +22,7 @@ public interface PaymentJpaRepository extends JpaRepository<Payment, UUID> {
 
     @Query("SELECT t.payment FROM TransferTransaction t WHERE t.status = 1")
     Collection<Payment> getPaymentByOpenTransferTransactions();
+
+    @Query("SELECT t.payment FROM TransferTransaction t WHERE t.status = 1 AND t.payment.memberId = :#{#memberId}")
+    Collection<Payment> getPaymentsByOpenTransferTransactionsByMemberId(@Param("memberId") MemberId memberId);
 }

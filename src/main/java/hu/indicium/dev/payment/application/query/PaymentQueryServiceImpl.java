@@ -40,4 +40,10 @@ public class PaymentQueryServiceImpl implements PaymentQueryService {
     public Collection<Payment> getPaymentsWithOpenTransferTransactions() {
         return paymentRepository.getPaymentsWithOpenTransferTransactions();
     }
+
+    @Override
+    @PreAuthorize("hasPermission('admin:payment')")
+    public Collection<Payment> getPaymentsWithOpenTransferTransactionsByMemberId(MemberId memberId) {
+        return paymentRepository.getPaymentsWithOpenTransferTransactionsByMemberId(memberId);
+    }
 }

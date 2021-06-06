@@ -5,6 +5,8 @@ import hu.indicium.dev.payment.domain.DomainEventPublisher;
 import hu.indicium.dev.payment.domain.model.member.MemberId;
 import hu.indicium.dev.payment.domain.model.transaction.Transaction;
 import hu.indicium.dev.payment.domain.model.transaction.TransactionId;
+import hu.indicium.dev.payment.domain.model.transaction.TransactionType;
+import hu.indicium.dev.payment.domain.model.transaction.TransferTransaction;
 import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -113,6 +115,18 @@ public class Payment extends AssertionConcern {
                 .filter(transaction -> transaction.getTransactionId().equals(transactionId))
                 .findFirst()
                 .orElseThrow(() -> new EntityNotFoundException(String.format("Transaction %s not found in payment %s", transactionId.getId().toString(), this.getPaymentId().getId().toString())));
+    }
+
+    public TransferTransaction getOpenTransferTransaction() {
+        for (Transaction transaction : this.transactions) {
+            if (transaction.getType() == TransactionType.TRANSFER) {
+                TransferTransaction transferTransaction = (TransferTransaction) transaction;
+                if (transferTransaction.isPending()) {
+                    return transferTransaction;
+                }
+            }
+        }
+        return null;
     }
 
     public void updateTransaction(TransactionId transactionId, BaseDetails baseDetails) {

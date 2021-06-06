@@ -8,6 +8,7 @@ import hu.indicium.dev.payment.domain.model.payment.Payment;
 import hu.indicium.dev.payment.domain.model.payment.PaymentId;
 import hu.indicium.dev.payment.infrastructure.util.Response;
 import hu.indicium.dev.payment.infrastructure.util.ResponseBuilder;
+import hu.indicium.dev.payment.infrastructure.web.dto.OpenTransferTransactionDto;
 import hu.indicium.dev.payment.infrastructure.web.dto.PaymentDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -81,6 +82,20 @@ public class PaymentController {
         Collection<Payment> payments = paymentQueryService.getPaymentsByMemberId(memberId);
         Collection<PaymentDto> paymentDtos = payments.stream()
                 .map(PaymentDto::new)
+                .collect(Collectors.toSet());
+        return ResponseBuilder.ok()
+                .data(paymentDtos)
+                .build();
+
+    }
+
+    @GetMapping("/members/{memberUuid}/payments/transfer")
+    @ResponseStatus(HttpStatus.OK)
+    public Response<Collection<OpenTransferTransactionDto>> getOpenTransferPaymentsByMemberId(@PathVariable("memberUuid") String memberUuid) {
+        MemberId memberId = MemberId.fromAuthId(memberUuid);
+        Collection<Payment> payments = paymentQueryService.getPaymentsWithOpenTransferTransactionsByMemberId(memberId);
+        Collection<OpenTransferTransactionDto> paymentDtos = payments.stream()
+                .map(OpenTransferTransactionDto::new)
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()
                 .data(paymentDtos)
