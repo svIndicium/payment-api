@@ -19,6 +19,7 @@ env:
   KEYCLOAK_URL: ${{secrets.KEYCLOAK_URL}}
   KEYCLOAK_REALM: ${{secrets.KEYCLOAK_REALM}}
   RABBITMQ_TOPIC_EXCHANGE_NAME: testing
+  SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
 jobs:
   # Run tests.
@@ -64,10 +65,7 @@ jobs:
           name: jar
           path: target/payment-0.0.1-SNAPSHOT.jar
       - name: SonarCloud Scan
-        uses: sonarsource/sonarcloud-github-action@master
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        run: ./mvnw verify org.sonarsource.scanner.maven:sonar-maven-plugin:sonar
 
   # Push image to GitHub Packages.
   # See also https://docs.docker.com/docker-hub/builds/
