@@ -27,11 +27,11 @@ public class TransactionServiceImpl implements TransactionService {
     @Override
     @PreAuthorize("(hasPermission('create:transaction') && #newTransactionCommand.method != 'cash') || (hasPermission('create:transaction') && #newTransactionCommand.method == 'cash' && hasPermission('admin:payment'))")
     public TransactionId createTransaction(NewTransactionCommand newTransactionCommand) {
-        var transactionId = transactionRepository.nextIdentity();
+        TransactionId transactionId = transactionRepository.nextIdentity();
 
-        var paymentId = PaymentId.fromId(newTransactionCommand.getPaymentId());
+        PaymentId paymentId = PaymentId.fromId(newTransactionCommand.getPaymentId());
 
-        var payment = paymentRepository.getPaymentById(paymentId);
+        Payment payment = paymentRepository.getPaymentById(paymentId);
 
         this.assignTransactionToPayment(transactionId, newTransactionCommand, payment);
 
@@ -44,7 +44,7 @@ public class TransactionServiceImpl implements TransactionService {
             throw new IllegalArgumentException("Er is te veel betaald.");
         }
 
-        var transaction = toTransaction(transactionId, newTransactionCommand);
+        Transaction transaction = toTransaction(transactionId, newTransactionCommand);
 
         payment.assignTransaction(transaction);
 
@@ -58,15 +58,15 @@ public class TransactionServiceImpl implements TransactionService {
     }
 
     public void update(UpdateTransactionCommand updateTransactionCommand) {
-        var paymentId = PaymentId.fromId(updateTransactionCommand.getPaymentId());
+        PaymentId paymentId = PaymentId.fromId(updateTransactionCommand.getPaymentId());
 
-        var payment = paymentRepository.getPaymentById(paymentId);
+        Payment payment = paymentRepository.getPaymentById(paymentId);
 
-        var transactionId = TransactionId.fromId(updateTransactionCommand.getTransactionId());
+        TransactionId transactionId = TransactionId.fromId(updateTransactionCommand.getTransactionId());
 
-        var transaction = transactionRepository.getTransactionById(transactionId);
+        Transaction transaction = transactionRepository.getTransactionById(transactionId);
 
-        var baseDetails = DetailFactory.createDetails(transaction.getType(), updateTransactionCommand);
+        BaseDetails baseDetails = DetailFactory.createDetails(transaction.getType(), updateTransactionCommand);
 
         payment.updateTransaction(transactionId, baseDetails);
 
@@ -80,8 +80,8 @@ public class TransactionServiceImpl implements TransactionService {
             case "transfer":
                 return new TransferTransaction(transactionId, newTransactionCommand.getAmount());
             case "ideal":
-                var paymentObject = paymentProvider.createPayment(new PaymentDetails(transactionId, newTransactionCommand.getDescription(), newTransactionCommand.getRedirectUrl(), newTransactionCommand.getAmount()));
-                var iDealTransaction = IDealTransaction.builder()
+                PaymentObject paymentObject = paymentProvider.createPayment(new PaymentDetails(transactionId, newTransactionCommand.getDescription(), newTransactionCommand.getRedirectUrl(), newTransactionCommand.getAmount()));
+                IDealTransaction iDealTransaction = IDealTransaction.builder()
                         .checkoutUrl(paymentObject.getCheckoutUrl())
                         .webhookUrl(paymentObject.getWebhookUrl())
                         .expiresAt(paymentObject.getExpiresAt())

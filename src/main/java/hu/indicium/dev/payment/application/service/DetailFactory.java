@@ -7,11 +7,6 @@ import hu.indicium.dev.payment.domain.model.transaction.info.IDealDetails;
 import hu.indicium.dev.payment.domain.model.transaction.info.TransferDetails;
 
 public class DetailFactory {
-
-    private DetailFactory() {
-        // private no-args constructor to hide the implicit public one
-    }
-
     public static BaseDetails createDetails(TransactionType transactionType, UpdateTransactionCommand request) {
         switch (transactionType) {
             case CASH:
