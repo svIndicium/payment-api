@@ -9,15 +9,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class OpenIDConnectService implements AuthService {
 
-    private final KeycloakProvider keycloakProvider;
-
-    @Value("${keycloak.realm}")
-    private String realm;
-
-    public OpenIDConnectService(KeycloakProvider keycloakProvider) {
-        this.keycloakProvider = keycloakProvider;
-    }
-
     @Override
     public User getCurrentUser() {
         SecurityContext securityContext = SecurityContextHolder.getContext();

@@ -7,11 +7,11 @@ import java.util.Collection;
 public interface TransactionRepository {
     TransactionId nextIdentity();
 
-    Transaction getTransactionById(TransactionId TransactionId);
+    Transaction getTransactionById(TransactionId transactionId);
 
     Collection<Transaction> getTransactionsByPaymentId(PaymentId paymentId);
 
-    Transaction save(Transaction Transaction);
+    Transaction save(Transaction transaction);
 
     Collection<Transaction> getAllTransactions();
 }
