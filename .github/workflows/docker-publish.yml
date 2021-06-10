@@ -20,6 +20,7 @@ env:
   KEYCLOAK_REALM: ${{secrets.KEYCLOAK_REALM}}
   RABBITMQ_TOPIC_EXCHANGE_NAME: testing
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 jobs:
   # Run tests.
