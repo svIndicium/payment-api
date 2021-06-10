@@ -32,8 +32,8 @@ public class PaymentController {
     @GetMapping("/payments")
     @ResponseStatus(HttpStatus.OK)
     public Response<Collection<PaymentDto>> getAllPayments() {
-        Collection<Payment> payments = paymentQueryService.getAllPayments();
-        Collection<PaymentDto> paymentDtos = payments.stream()
+        var payments = paymentQueryService.getAllPayments();
+        var paymentDtos = payments.stream()
                 .map(PaymentDto::new)
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()
@@ -44,8 +44,8 @@ public class PaymentController {
     @GetMapping("/payments/transfer")
     @ResponseStatus(HttpStatus.OK)
     public Response<Collection<PaymentDto>> getPaymentsWithOpenTransferTransaction() {
-        Collection<Payment> payments = paymentQueryService.getPaymentsWithOpenTransferTransactions();
-        Collection<PaymentDto> paymentDtos = payments.stream()
+        var payments = paymentQueryService.getPaymentsWithOpenTransferTransactions();
+        var paymentDtos = payments.stream()
                 .map(PaymentDto::new)
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()
@@ -56,9 +56,9 @@ public class PaymentController {
     @GetMapping("/payments/{paymentUuid}")
     @ResponseStatus(HttpStatus.OK)
     public Response<PaymentDto> getPaymentById(@PathVariable UUID paymentUuid) {
-        PaymentId paymentId = PaymentId.fromId(paymentUuid);
-        Payment payment = paymentQueryService.getPaymentById(paymentId);
-        PaymentDto paymentDto = new PaymentDto(payment);
+        var paymentId = PaymentId.fromId(paymentUuid);
+        var payment = paymentQueryService.getPaymentById(paymentId);
+        var paymentDto = new PaymentDto(payment);
         return ResponseBuilder.ok()
                 .data(paymentDto)
                 .build();
@@ -67,9 +67,9 @@ public class PaymentController {
     @PostMapping("/payments")
     @ResponseStatus(HttpStatus.CREATED)
     public Response<PaymentDto> createPayment(@RequestBody NewPaymentCommand newPaymentCommand) {
-        PaymentId paymentId = paymentService.createPayment(newPaymentCommand);
-        Payment payment = paymentQueryService.getPaymentById(paymentId);
-        PaymentDto paymentDto = new PaymentDto(payment);
+        var paymentId = paymentService.createPayment(newPaymentCommand);
+        var payment = paymentQueryService.getPaymentById(paymentId);
+        var paymentDto = new PaymentDto(payment);
         return ResponseBuilder.created()
                 .data(paymentDto)
                 .build();
@@ -78,9 +78,9 @@ public class PaymentController {
     @GetMapping("/members/{memberUuid}/payments")
     @ResponseStatus(HttpStatus.OK)
     public Response<Collection<PaymentDto>> getPaymentsByMemberId(@PathVariable("memberUuid") String memberUuid) {
-        MemberId memberId = MemberId.fromAuthId(memberUuid);
-        Collection<Payment> payments = paymentQueryService.getPaymentsByMemberId(memberId);
-        Collection<PaymentDto> paymentDtos = payments.stream()
+        var memberId = MemberId.fromAuthId(memberUuid);
+        var payments = paymentQueryService.getPaymentsByMemberId(memberId);
+        var paymentDtos = payments.stream()
                 .map(PaymentDto::new)
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()
@@ -92,9 +92,9 @@ public class PaymentController {
     @GetMapping("/members/{memberUuid}/payments/transfer")
     @ResponseStatus(HttpStatus.OK)
     public Response<Collection<OpenTransferTransactionDto>> getOpenTransferPaymentsByMemberId(@PathVariable("memberUuid") String memberUuid) {
-        MemberId memberId = MemberId.fromAuthId(memberUuid);
-        Collection<Payment> payments = paymentQueryService.getPaymentsWithOpenTransferTransactionsByMemberId(memberId);
-        Collection<OpenTransferTransactionDto> paymentDtos = payments.stream()
+        var memberId = MemberId.fromAuthId(memberUuid);
+        var payments = paymentQueryService.getPaymentsWithOpenTransferTransactionsByMemberId(memberId);
+        var paymentDtos = payments.stream()
                 .map(OpenTransferTransactionDto::new)
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()

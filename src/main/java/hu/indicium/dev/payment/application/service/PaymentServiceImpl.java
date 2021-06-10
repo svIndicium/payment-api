@@ -19,13 +19,13 @@ public class PaymentServiceImpl implements PaymentService {
     @Override
     @PreAuthorize("hasPermission('admin:payment') || (hasPermission('create:payment') && userIdEquals(#newPaymentCommand.authId))")
     public PaymentId createPayment(NewPaymentCommand newPaymentCommand) {
-        PaymentId paymentId = paymentRepository.nextIdentity();
+        var paymentId = paymentRepository.nextIdentity();
 
-        PaymentDetails paymentDetails = new PaymentDetails(newPaymentCommand.getDescription());
+        var paymentDetails = new PaymentDetails(newPaymentCommand.getDescription());
 
-        MemberId memberId = MemberId.fromAuthId(newPaymentCommand.getAuthId());
+        var memberId = MemberId.fromAuthId(newPaymentCommand.getAuthId());
 
-        Payment payment = new Payment(paymentId, memberId, newPaymentCommand.getAmount(), paymentDetails);
+        var payment = new Payment(paymentId, memberId, newPaymentCommand.getAmount(), paymentDetails);
 
         paymentRepository.save(payment);
 

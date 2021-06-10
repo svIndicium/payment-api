@@ -33,8 +33,8 @@ public class TransactionController {
     @GetMapping("/transactions")
     @ResponseStatus(HttpStatus.OK)
     public Response<Collection<TransactionDto>> getAllTransactions() {
-        Collection<Transaction> transactions = queryService.getAllTransactions();
-        Collection<TransactionDto> transactionDtos = transactions.stream()
+        var transactions = queryService.getAllTransactions();
+        var transactionDtos = transactions.stream()
                 .map(TransactionMapper::toDto)
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()
@@ -46,9 +46,9 @@ public class TransactionController {
     @ResponseStatus(HttpStatus.CREATED)
     public Response<TransactionDto> createTransaction(@PathVariable UUID paymentId, @RequestBody NewTransactionCommand newTransactionCommand) {
         newTransactionCommand.setPaymentId(paymentId);
-        TransactionId transactionId = transactionService.createTransaction(newTransactionCommand);
-        Transaction transaction = queryService.getTransactionById(transactionId);
-        TransactionDto transactionDto = TransactionMapper.toDto(transaction);
+        var transactionId = transactionService.createTransaction(newTransactionCommand);
+        var transaction = queryService.getTransactionById(transactionId);
+        var transactionDto = TransactionMapper.toDto(transaction);
         return ResponseBuilder.created()
                 .data(transactionDto)
                 .build();
@@ -57,9 +57,9 @@ public class TransactionController {
     @GetMapping("/payments/{paymentId}/transactions")
     @ResponseStatus(HttpStatus.OK)
     public Response<Collection<TransactionDto>> createTransaction(@PathVariable UUID paymentId) {
-        PaymentId id = PaymentId.fromId(paymentId);
-        Collection<Transaction> transactions = queryService.getAllTransactionsByPaymentId(id);
-        Collection<TransactionDto> transactionDtos = transactions.stream()
+        var id = PaymentId.fromId(paymentId);
+        var transactions = queryService.getAllTransactionsByPaymentId(id);
+        var transactionDtos = transactions.stream()
                 .map(TransactionMapper::toDto)
                 .collect(Collectors.toSet());
         return ResponseBuilder.ok()
@@ -72,10 +72,10 @@ public class TransactionController {
     public Response<TransactionDto> updateTransaction(@PathVariable UUID paymentId, @PathVariable UUID transactionId, @RequestBody UpdateTransactionCommand updateTransactionCommand) {
         updateTransactionCommand.setPaymentId(paymentId);
         updateTransactionCommand.setTransactionId(transactionId);
-        TransactionId id = TransactionId.fromId(transactionId);
+        var id = TransactionId.fromId(transactionId);
         transactionService.updateTransaction(updateTransactionCommand);
-        Transaction transaction = queryService.getTransactionById(id);
-        TransactionDto transactionDto = TransactionMapper.toDto(transaction);
+        var transaction = queryService.getTransactionById(id);
+        var transactionDto = TransactionMapper.toDto(transaction);
         return ResponseBuilder.created()
                 .data(transactionDto)
                 .build();
