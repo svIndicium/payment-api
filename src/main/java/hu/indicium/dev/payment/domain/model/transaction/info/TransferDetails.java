@@ -4,8 +4,6 @@ import hu.indicium.dev.payment.domain.model.transaction.TransactionStatus;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Embeddable;
 import java.util.Date;
 
 @Data

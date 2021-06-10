@@ -14,7 +14,7 @@ import java.util.Date;
 @Entity
 @Getter
 @NoArgsConstructor
-@Inheritance(strategy=InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public abstract class Transaction extends AssertionConcern {
     @EmbeddedId
     protected TransactionId transactionId;

@@ -4,7 +4,6 @@ import hu.indicium.dev.payment.domain.AssertionConcern;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.Embeddable;
 import java.util.Date;

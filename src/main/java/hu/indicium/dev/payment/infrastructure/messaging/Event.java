@@ -6,7 +6,7 @@ import java.io.Serializable;
 
 @Getter
 public abstract class Event implements Serializable {
-    private String routingKey;
+    private final String routingKey;
 
     private final int version;
 

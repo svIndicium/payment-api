@@ -2,7 +2,6 @@ package hu.indicium.dev.events;
 
 import hu.indicium.dev.payment.domain.model.payment.Payment;
 import hu.indicium.dev.payment.infrastructure.messaging.Event;
-import hu.indicium.dev.payment.infrastructure.messaging.QueueableEvent;
 import lombok.Getter;
 
 import java.util.UUID;

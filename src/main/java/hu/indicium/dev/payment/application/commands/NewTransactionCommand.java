@@ -1,7 +1,5 @@
 package hu.indicium.dev.payment.application.commands;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 
 import java.util.UUID;

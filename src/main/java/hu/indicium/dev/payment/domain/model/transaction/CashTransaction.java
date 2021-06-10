@@ -1,7 +1,6 @@
 package hu.indicium.dev.payment.domain.model.transaction;
 
 import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
-import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.Entity;

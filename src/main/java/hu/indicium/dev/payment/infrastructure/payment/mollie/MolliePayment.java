@@ -11,19 +11,19 @@ import java.util.UUID;
 
 
 public class MolliePayment implements PaymentObject {
-    private String externalId;
+    private final String externalId;
 
-    private TransactionId transactionId;
+    private final TransactionId transactionId;
 
-    private TransactionStatus transactionStatus;
+    private final TransactionStatus transactionStatus;
 
     private Date expiresAt;
 
     private String checkoutUrl;
 
-    private String webhookUrl;
+    private final String webhookUrl;
 
-    private String redirectUrl;
+    private final String redirectUrl;
 
     private Date paidAt;
 

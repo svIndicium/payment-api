@@ -13,7 +13,6 @@ import hu.indicium.dev.payment.infrastructure.util.Util;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;

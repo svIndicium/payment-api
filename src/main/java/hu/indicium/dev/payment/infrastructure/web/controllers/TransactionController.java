@@ -51,7 +51,7 @@ public class TransactionController {
         TransactionDto transactionDto = TransactionMapper.toDto(transaction);
         return ResponseBuilder.created()
                 .data(transactionDto)
-                 .build();
+                .build();
     }
 
     @GetMapping("/payments/{paymentId}/transactions")

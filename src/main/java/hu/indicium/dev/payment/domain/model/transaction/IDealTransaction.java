@@ -2,7 +2,6 @@ package hu.indicium.dev.payment.domain.model.transaction;
 
 import hu.indicium.dev.payment.domain.model.transaction.info.BaseDetails;
 import hu.indicium.dev.payment.domain.model.transaction.info.IDealDetails;
-import hu.indicium.dev.payment.domain.model.transaction.info.TransferDetails;
 import lombok.*;
 
 import javax.persistence.Entity;

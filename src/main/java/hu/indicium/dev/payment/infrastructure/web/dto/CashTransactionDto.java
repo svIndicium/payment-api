@@ -2,7 +2,6 @@ package hu.indicium.dev.payment.infrastructure.web.dto;
 
 
 import hu.indicium.dev.payment.domain.model.transaction.CashTransaction;
-import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 

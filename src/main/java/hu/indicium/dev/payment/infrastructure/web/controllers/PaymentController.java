@@ -29,7 +29,7 @@ public class PaymentController {
 
     private final PaymentService paymentService;
 
-    @GetMapping( "/payments")
+    @GetMapping("/payments")
     @ResponseStatus(HttpStatus.OK)
     public Response<Collection<PaymentDto>> getAllPayments() {
         Collection<Payment> payments = paymentQueryService.getAllPayments();
@@ -41,7 +41,7 @@ public class PaymentController {
                 .build();
     }
 
-    @GetMapping( "/payments/transfer")
+    @GetMapping("/payments/transfer")
     @ResponseStatus(HttpStatus.OK)
     public Response<Collection<PaymentDto>> getPaymentsWithOpenTransferTransaction() {
         Collection<Payment> payments = paymentQueryService.getPaymentsWithOpenTransferTransactions();
@@ -53,7 +53,7 @@ public class PaymentController {
                 .build();
     }
 
-    @GetMapping( "/payments/{paymentUuid}")
+    @GetMapping("/payments/{paymentUuid}")
     @ResponseStatus(HttpStatus.OK)
     public Response<PaymentDto> getPaymentById(@PathVariable UUID paymentUuid) {
         PaymentId paymentId = PaymentId.fromId(paymentUuid);

@@ -33,7 +33,7 @@ public class Payment extends AssertionConcern {
     private PaymentStatus paymentStatus;
 
     @OneToMany(mappedBy = "payment", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private Set<Transaction> transactions = new HashSet<>();
+    private final Set<Transaction> transactions = new HashSet<>();
 
     public Payment(PaymentId paymentId, MemberId memberId, Double amount, PaymentDetails paymentDetails) {
         this.setPaymentId(paymentId);

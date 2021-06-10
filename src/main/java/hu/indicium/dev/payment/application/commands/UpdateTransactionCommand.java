@@ -1,7 +1,5 @@
 package hu.indicium.dev.payment.application.commands;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import hu.indicium.dev.payment.domain.model.transaction.TransactionStatus;
 import lombok.Data;
 

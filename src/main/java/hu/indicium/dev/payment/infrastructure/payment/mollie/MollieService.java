@@ -1,12 +1,9 @@
 package hu.indicium.dev.payment.infrastructure.payment.mollie;
 
 import hu.indicium.dev.payment.application.commands.UpdateTransactionCommand;
-import hu.indicium.dev.payment.application.service.TransactionService;
 import hu.indicium.dev.payment.application.service.TransactionServiceImpl;
 import hu.indicium.dev.payment.domain.model.transaction.IDealTransactionRepository;
 import hu.indicium.dev.payment.domain.model.transaction.Transaction;
-import hu.indicium.dev.payment.domain.model.transaction.TransactionRepository;
-import hu.indicium.dev.payment.domain.model.transaction.TransactionStatus;
 import hu.indicium.dev.payment.infrastructure.payment.PaymentObject;
 import hu.indicium.dev.payment.infrastructure.payment.PaymentProvider;
 import lombok.AllArgsConstructor;

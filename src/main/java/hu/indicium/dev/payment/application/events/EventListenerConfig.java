@@ -21,7 +21,7 @@ public class EventListenerConfig implements CommandLineRunner {
     @SuppressWarnings({"rawtypes", "unchecked"})
     public void run(String... args) throws Exception {
         List<DomainEventSubscriber> subscribers = Arrays.asList(
-            new PaymentUpdatedListener(eventService)
+                new PaymentUpdatedListener(eventService)
         );
         for (DomainEventSubscriber subscriber : subscribers) {
             DomainEventPublisher.instance().subscribe(subscriber);

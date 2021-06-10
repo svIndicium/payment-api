@@ -1,7 +1,6 @@
 package hu.indicium.dev.payment.infrastructure.web.dto;
 
 import hu.indicium.dev.payment.domain.model.transaction.IDealTransaction;
-import hu.indicium.dev.payment.domain.model.transaction.Transaction;
 import lombok.Getter;
 
 import java.util.Date;
@@ -9,17 +8,17 @@ import java.util.Date;
 @Getter
 public class IDealTransactionDto extends TransactionDto {
 
-    private String externalId;
+    private final String externalId;
 
-    private String paymentProvider;
+    private final String paymentProvider;
 
-    private Date expiresAt;
+    private final Date expiresAt;
 
-    private String checkoutUrl;
+    private final String checkoutUrl;
 
-    private String webhookUrl;
+    private final String webhookUrl;
 
-    private String redirectUrl;
+    private final String redirectUrl;
 
     public IDealTransactionDto(IDealTransaction transaction) {
         super(transaction);
