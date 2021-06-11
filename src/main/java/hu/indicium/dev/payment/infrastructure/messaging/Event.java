@@ -10,12 +10,12 @@ public abstract class Event implements Serializable {
 
     private final int version;
 
-    public Event(String routingKey) {
+    protected Event(String routingKey) {
         this.routingKey = routingKey;
         this.version = 1;
     }
 
-    public Event(String routingKey, int version) {
+    protected Event(String routingKey, int version) {
         this.routingKey = routingKey;
         this.version = version;
     }

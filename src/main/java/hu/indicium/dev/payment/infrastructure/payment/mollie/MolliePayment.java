@@ -103,7 +103,8 @@ public class MolliePayment implements PaymentObject {
                 return TransactionStatus.FAILED;
             case "canceled":
                 return TransactionStatus.CANCELED;
+            default:
+                throw new IllegalStateException("Unknown state");
         }
-        throw new IllegalStateException("Unknown state");
     }
 }

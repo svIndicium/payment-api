@@ -11,7 +11,7 @@ import java.util.Date;
 public class TransferDetails extends BaseDetails {
     private String description;
 
-    private transient Double paid;
+    private Double paid;
 
     public TransferDetails(TransactionStatus transactionStatus, Date transferredAt, String description, Double paid) {
         super(transactionStatus, transferredAt);

@@ -13,7 +13,7 @@ public abstract class BaseDetails {
 
     private Date transferredAt;
 
-    public BaseDetails(TransactionStatus transactionStatus, Date transferredAt) {
+    protected BaseDetails(TransactionStatus transactionStatus, Date transferredAt) {
         this.transactionStatus = transactionStatus;
         this.transferredAt = transferredAt;
     }

@@ -10,6 +10,11 @@ import hu.indicium.dev.payment.infrastructure.web.dto.TransactionDto;
 import hu.indicium.dev.payment.infrastructure.web.dto.TransferTransactionDto;
 
 public class TransactionMapper {
+
+    private TransactionMapper() {
+        // private constructor to hide the implicit one
+    }
+
     public static TransactionDto toDto(Transaction transaction) {
         switch (transaction.getType()) {
             case CASH:

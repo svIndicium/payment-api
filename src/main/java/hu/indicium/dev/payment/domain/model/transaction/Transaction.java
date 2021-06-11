@@ -34,7 +34,7 @@ public abstract class Transaction extends AssertionConcern {
 
     private Date finishedAt;
 
-    public Transaction(TransactionId transactionId, Double amount) {
+    protected Transaction(TransactionId transactionId, Double amount) {
         this.transactionId = transactionId;
         this.amount = amount;
         this.status = TransactionStatus.PENDING;
