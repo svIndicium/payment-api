@@ -1,5 +1,7 @@
 package hu.indicium.dev.payment.infrastructure.setting;
 
+import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Column;
@@ -8,6 +10,7 @@ import javax.persistence.Id;
 import java.util.Date;
 
 @Entity
+@Getter
 public class Setting {
     @Id
     @Column(name = "key", nullable = false, updatable = false)
@@ -16,14 +19,14 @@ public class Setting {
     @Column(name = "value", nullable = false)
     private String value;
 
-    @Column(name = "permission", updatable = false)
-    private String permission;
+    @Column(name = "read_permission", updatable = false)
+    private String readPermission;
 
-    @Column(name = "title")
-    private String title;
+    @Column(name = "write_permission", updatable = false)
+    private String writePermission;
 
-    @Column(name = "description")
-    private String description;
+    @Column(name = "write_only", updatable = false)
+    private boolean writeOnly;
 
     @UpdateTimestamp
     private Date updatedAt;
@@ -31,59 +34,24 @@ public class Setting {
     @Column(name = "updated_by")
     private String updatedBy;
 
-    public Setting() {
-        // public no-args constructor for hibernate
+    public void updateSetting(String value, String updatedBy) {
+        this.setValue(value);
+        this.setUpdatedBy(updatedBy);
     }
 
-    public String getKey() {
-        return key;
-    }
-
-    public void setKey(String key) {
-        this.key = key;
-    }
-
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
+    private void setValue(String value) {
+        this.assertArgumentNotEmpty(value, "Setting can not be empty.");
         this.value = value;
     }
 
-    public String getPermission() {
-        return permission;
-    }
-
-    public void setPermission(String permission) {
-        this.permission = permission;
-    }
-
-    public String getTitle() {
-        return title;
-    }
-
-    public void setTitle(String title) {
-        this.title = title;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
-    }
-
-    public void setUpdatedBy(String updatedBy) {
+    private void setUpdatedBy(String updatedBy) {
+        this.assertArgumentNotEmpty(updatedBy, "User updating the setting must be provided.");
         this.updatedBy = updatedBy;
+    }
+
+    protected void assertArgumentNotEmpty(String aString, String aMessage) {
+        if (aString == null || aString.trim().isEmpty()) {
+            throw new IllegalArgumentException(aMessage);
+        }
     }
 }

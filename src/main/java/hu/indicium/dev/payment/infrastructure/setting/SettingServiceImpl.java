@@ -2,17 +2,15 @@ package hu.indicium.dev.payment.infrastructure.setting;
 
 import hu.indicium.dev.payment.infrastructure.auth.AuthService;
 import hu.indicium.dev.payment.infrastructure.auth.User;
-import hu.indicium.dev.payment.infrastructure.setting.dto.SettingDTO;
 import hu.indicium.dev.payment.infrastructure.setting.exceptions.SettingNotFoundException;
 import hu.indicium.dev.payment.infrastructure.setting.exceptions.SettingNotSetException;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.security.access.prepost.PostFilter;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class SettingServiceImpl implements SettingService {
@@ -28,37 +26,34 @@ public class SettingServiceImpl implements SettingService {
 
     @Override
     public String getValueByKey(String key) {
-        return getSettingByKey(key).getValue();
+        return getSetting(key).getValue();
     }
 
     @Override
-    public SettingDTO getSettingByKey(String key) {
+    @PostAuthorize("hasPermission('read:' + returnObject.readPermission)")
+    public Setting getSettingByKey(String key) {
         Setting setting = getSetting(key);
         if (setting.getValue().isBlank()) {
             throw new SettingNotSetException(key);
         }
-        return SettingMapper.map(setting);
+        return setting;
     }
 
     @Override
-    @PostAuthorize("hasPermission('write:' + returnObject.permission)")
-    public SettingDTO updateSetting(String key, String value) {
+    @Transactional
+    @PostAuthorize("hasPermission('write:' + returnObject.writePermission)")
+    public Setting updateSetting(String key, String value) {
         User currentUser = authService.getCurrentUser();
         Setting setting = getSetting(key);
-        setting.setValue(value);
-        setting.setUpdatedBy(currentUser.getName());
+        setting.updateSetting(value, currentUser.getName());
         setting = settingRepository.save(setting);
-        return SettingMapper.map(setting);
+        return setting;
     }
 
     @Override
-    @PreAuthorize("hasPermission('read:settings')")
-    @PostFilter("hasPermission('read:' + filterObject.permission)")
-    public List<SettingDTO> getAllSettings() {
-        return settingRepository.findAll()
-                .stream()
-                .map(SettingMapper::map)
-                .collect(Collectors.toList());
+    @PostFilter("hasPermission('read:' + filterObject.readPermission)")
+    public List<Setting> getAllSettings() {
+        return settingRepository.findAll();
     }
 
     private Setting getSetting(String key) {
