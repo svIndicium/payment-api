@@ -92,7 +92,8 @@ public class TransactionServiceImpl implements TransactionService {
                 iDealTransaction.setTransactionId(transactionId);
                 iDealTransaction.setAmount(newTransactionCommand.getAmount());
                 return iDealTransaction;
+            default:
+                throw new RuntimeException("Transaction method not implemented");
         }
-        throw new RuntimeException("Transaction method not implemented");
     }
 }

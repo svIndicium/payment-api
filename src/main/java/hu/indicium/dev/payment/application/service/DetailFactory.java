@@ -7,6 +7,11 @@ import hu.indicium.dev.payment.domain.model.transaction.info.IDealDetails;
 import hu.indicium.dev.payment.domain.model.transaction.info.TransferDetails;
 
 public class DetailFactory {
+
+    private DetailFactory() {
+        // Private constructor to hide the implicit one
+    }
+
     public static BaseDetails createDetails(TransactionType transactionType, UpdateTransactionCommand request) {
         switch (transactionType) {
             case CASH:
@@ -15,7 +20,8 @@ public class DetailFactory {
                 return new IDealDetails(request.getTransactionStatus(), request.getTransferredAt());
             case TRANSFER:
                 return new TransferDetails(request.getTransactionStatus(), request.getTransferredAt(), request.getDescription(), request.getPaid());
+            default:
+                throw new IllegalStateException("Betaal methode niet ondersteund.");
         }
-        throw new IllegalStateException("Betaal methode niet ondersteund.");
     }
 }
