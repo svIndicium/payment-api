@@ -50,7 +50,7 @@ class PaymentTest {
         assertThat(payment.getPaymentStatus()).isEqualTo(PaymentStatus.OPEN);
         assertThat(payment.getOpenAmount()).isEqualTo(amount);
         assertThat(payment.getRemainingAmount()).isEqualTo(amount);
-        assertThat(payment.getTransactions().size()).isEqualTo(0);
+        assertThat(payment.getTransactions().size()).isZero();
         assertThat(payment.canAcceptTransactionAmount(amount)).isTrue();
         assertThat(payment.canAcceptTransactionAmount(amount + 1)).isFalse();
     }
@@ -113,7 +113,7 @@ class PaymentTest {
         assertThat(payment.getPaymentStatus()).isEqualTo(PaymentStatus.OPEN);
         assertThat(payment.getOpenAmount()).isEqualTo(amount);
         assertThat(payment.getRemainingAmount()).isEqualTo(amount);
-        assertThat(payment.getTransactions().size()).isEqualTo(0);
+        assertThat(payment.getTransactions().size()).isZero();
 
         TransactionId transactionId = TransactionId.fromId(UUID.randomUUID());
 
@@ -139,7 +139,7 @@ class PaymentTest {
 
         List<DomainEvent> occurredEvents = domainEventSubscriber.getEvents();
 
-        assertThat(occurredEvents.size()).isGreaterThanOrEqualTo(1);
+        assertThat(occurredEvents.size()).isPositive();
 
         DomainEvent domainEvent = occurredEvents.get(0);
         PaymentUpdated paymentUpdated = (PaymentUpdated) domainEvent;
@@ -157,7 +157,7 @@ class PaymentTest {
         assertThat(payment.getPaymentStatus()).isEqualTo(PaymentStatus.OPEN);
         assertThat(payment.getOpenAmount()).isEqualTo(amount);
         assertThat(payment.getRemainingAmount()).isEqualTo(amount);
-        assertThat(payment.getTransactions().size()).isEqualTo(0);
+        assertThat(payment.getTransactions().size()).isZero();
 
         TransactionId transactionId = TransactionId.fromId(UUID.randomUUID());
 
@@ -181,7 +181,7 @@ class PaymentTest {
 
         List<DomainEvent> occurredEvents = domainEventSubscriber.getEvents();
 
-        assertThat(occurredEvents.size()).isGreaterThanOrEqualTo(1);
+        assertThat(occurredEvents.size()).isPositive();
 
         DomainEvent domainEvent = occurredEvents.get(0);
         PaymentUpdated paymentUpdated = (PaymentUpdated) domainEvent;
