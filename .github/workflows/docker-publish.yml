@@ -19,6 +19,7 @@ env:
   KEYCLOAK_URL: ${{secrets.KEYCLOAK_URL}}
   KEYCLOAK_REALM: ${{secrets.KEYCLOAK_REALM}}
   RABBITMQ_TOPIC_EXCHANGE_NAME: testing
+  RABBITMQ_HOST: localhost
   SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -43,6 +44,10 @@ jobs:
           --health-retries 5
         ports:
           - 5432:5432
+      rabbitmq:
+        image: rabbitmq:3-management
+        ports:
+          - 5672:5672
 
     steps:
       - uses: actions/checkout@v2
