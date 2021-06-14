@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Embeddable;
 import javax.persistence.GeneratedValue;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.UUID;
 
 @Embeddable
@@ -25,5 +26,13 @@ public class PaymentId implements Serializable {
 
     public static PaymentId fromId(UUID id) {
         return new PaymentId(id);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        PaymentId paymentId = (PaymentId) o;
+        return Objects.equals(id, paymentId.id);
     }
 }
