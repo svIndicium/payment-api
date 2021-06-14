@@ -30,7 +30,7 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    @PostAuthorize("hasPermission('read:' + returnObject.readPermission)")
+    @PostAuthorize("hasPermission(returnObject.readPermission)")
     public Setting getSettingByKey(String key) {
         Setting setting = getSetting(key);
         if (setting.getValue().isBlank()) {
@@ -41,7 +41,7 @@ public class SettingServiceImpl implements SettingService {
 
     @Override
     @Transactional
-    @PostAuthorize("hasPermission('write:' + returnObject.writePermission)")
+    @PostAuthorize("hasPermission(returnObject.writePermission)")
     public Setting updateSetting(String key, String value) {
         User currentUser = authService.getCurrentUser();
         Setting setting = getSetting(key);
@@ -51,7 +51,7 @@ public class SettingServiceImpl implements SettingService {
     }
 
     @Override
-    @PostFilter("hasPermission('read:' + filterObject.readPermission)")
+    @PostFilter("hasPermission(filterObject.readPermission)")
     public List<Setting> getAllSettings() {
         return settingRepository.findAll();
     }
