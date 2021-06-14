@@ -77,13 +77,13 @@ public class Payment extends AssertionConcern {
         this.amount = amount;
     }
 
-    public void setPaymentStatus(PaymentStatus paymentStatus) {
+    private void setPaymentStatus(PaymentStatus paymentStatus) {
         this.setPaymentStatusWithoutEvent(paymentStatus);
         DomainEventPublisher.instance()
                 .publish(new PaymentUpdated(this));
     }
 
-    public void setPaymentStatusWithoutEvent(PaymentStatus paymentStatus) {
+    private void setPaymentStatusWithoutEvent(PaymentStatus paymentStatus) {
         assertArgumentNotNull(paymentStatus, "Betalingstatus moet worden meegegeven.");
 
         this.paymentStatus = paymentStatus;
@@ -120,9 +120,8 @@ public class Payment extends AssertionConcern {
     public TransferTransaction getOpenTransferTransaction() {
         for (Transaction transaction : this.transactions) {
             if (transaction.getType() == TransactionType.TRANSFER) {
-                TransferTransaction transferTransaction = (TransferTransaction) transaction;
-                if (transferTransaction.isPending()) {
-                    return transferTransaction;
+                if (transaction.isPending()) {
+                    return  (TransferTransaction) transaction;
                 }
             }
         }
