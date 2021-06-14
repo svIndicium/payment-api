@@ -25,5 +25,7 @@ class PaymentIdTest {
         PaymentId paymentId = PaymentId.fromId(uuid);
         PaymentId paymentId1 = PaymentId.fromId(uuid);
         assertThat(paymentId).isEqualTo(paymentId1);
+        assertThat(paymentId).isEqualTo(paymentId);
+        assertThat(paymentId).isNotEqualTo("");
     }
 }

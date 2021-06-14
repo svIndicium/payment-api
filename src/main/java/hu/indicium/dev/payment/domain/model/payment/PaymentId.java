@@ -35,4 +35,9 @@ public class PaymentId implements Serializable {
         PaymentId paymentId = (PaymentId) o;
         return Objects.equals(id, paymentId.id);
     }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
