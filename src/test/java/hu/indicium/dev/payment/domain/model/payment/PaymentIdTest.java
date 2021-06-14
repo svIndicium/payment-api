@@ -11,6 +11,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 class PaymentIdTest {
 
     @Test
+    @DisplayName("Create PaymentId")
     public void shouldCreatePaymentId() {
         UUID uuid = UUID.randomUUID();
         PaymentId paymentId = PaymentId.fromId(uuid);
@@ -18,6 +19,7 @@ class PaymentIdTest {
     }
 
     @Test
+    @DisplayName("Compare PaymentId")
     public void shouldEqualWhenTwoPaymentIdWithSameUuid() {
         UUID uuid = UUID.randomUUID();
         PaymentId paymentId = PaymentId.fromId(uuid);
