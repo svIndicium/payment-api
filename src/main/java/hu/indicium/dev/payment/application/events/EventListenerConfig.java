@@ -7,12 +7,14 @@ import hu.indicium.dev.payment.infrastructure.messaging.EventService;
 import lombok.AllArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
 @Configuration
+@Order(5)
 public class EventListenerConfig implements CommandLineRunner {
 
     private final EventService eventService;
