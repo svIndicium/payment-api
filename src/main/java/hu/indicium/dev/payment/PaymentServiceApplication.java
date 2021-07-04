@@ -22,8 +22,8 @@ public class PaymentServiceApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         for (Payment payment : paymentJpaRepository.getPaymentsByPaymentDetailsDescription("Contributie 2020-2021")) {
-            log.info("Checking payment " + payment.getPaymentId().getId().toString() + ". Remaining:" + payment.getRemainingAmount());
             if (payment.getRemainingAmount() == 15.0) {
+                log.info("Checking payment " + payment.getPaymentId().getId().toString() + ". Remaining:" + payment.getRemainingAmount());
                 payment.cancel();
             }
         }
