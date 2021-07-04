@@ -65,6 +65,15 @@ public class Payment extends AssertionConcern {
         return amount - open;
     }
 
+    public void cancel() {
+        this.setPaymentStatus(PaymentStatus.CANCELLED);
+        for (Transaction transaction : transactions) {
+            if (transaction.isPending()) {
+                transaction.cancel();
+            }
+        }
+    }
+
     private void setPaymentId(PaymentId orderId) {
         assertArgumentNotNull(orderId, "Order ID moet worden meegegeven.");
 

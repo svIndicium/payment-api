@@ -90,4 +90,8 @@ public abstract class Transaction extends AssertionConcern {
     public abstract void updateTransaction(BaseDetails updatedTransactionInfo);
 
     public abstract TransactionType getType();
+
+    public void cancel() {
+        this.setStatus(TransactionStatus.CANCELED);
+    }
 }

@@ -20,6 +20,8 @@ public interface PaymentJpaRepository extends JpaRepository<Payment, UUID> {
 
     Collection<Payment> getPaymentsByMemberId(MemberId memberId);
 
+    Collection<Payment> getPaymentsByPaymentDetailsDescription(String description);
+
     @Query("SELECT t.payment FROM TransferTransaction t WHERE t.status = 1")
     Collection<Payment> getPaymentByOpenTransferTransactions();
 
