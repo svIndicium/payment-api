@@ -66,7 +66,7 @@ public class Payment extends AssertionConcern {
     }
 
     public void cancel() {
-        this.setPaymentStatus(PaymentStatus.CANCELLED);
+        this.setPaymentStatusWithoutEvent(PaymentStatus.CANCELLED);
         for (Transaction transaction : transactions) {
             if (transaction.isPending()) {
                 transaction.cancel();

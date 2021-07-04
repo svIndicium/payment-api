@@ -1,6 +1,8 @@
 package hu.indicium.dev.payment;
 
+import hu.indicium.dev.payment.domain.DomainEventPublisher;
 import hu.indicium.dev.payment.domain.model.payment.Payment;
+import hu.indicium.dev.payment.domain.model.payment.PaymentUpdated;
 import hu.indicium.dev.payment.infrastructure.persistency.jpa.PaymentJpaRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,8 @@ public class PaymentServiceApplication implements CommandLineRunner {
             if (payment.getRemainingAmount() == 15.0) {
                 log.info("Checking payment " + payment.getPaymentId().getId().toString() + ". Remaining:" + payment.getRemainingAmount());
                 payment.cancel();
+                paymentJpaRepository.save(payment);
+                DomainEventPublisher.instance().publish(new PaymentUpdated(payment));
             }
         }
     }
